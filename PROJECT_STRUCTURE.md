@@ -1,0 +1,301 @@
+# 📁 OrbitHub - Project Structure
+
+## 🌳 Directory Tree
+
+```
+OrbitHub/
+├── 📂 backend/                    # Python FastAPI Backend
+│   ├── 📂 app/                   # Application source code
+│   │   ├── __init__.py          # Package initializer
+│   │   ├── main.py              # FastAPI app & API endpoints
+│   │   ├── data_access.py       # Data loading, filtering & persistence
+│   │   ├── features.py          # Feature engineering for ML
+│   │   ├── train.py             # ML model training script
+│   │   ├── predict.py           # Classification prediction script
+│   │   └── 📂 models/           # Trained ML artifacts
+│   │       ├── kmeans.joblib           # KMeans clustering model
+│   │       ├── preprocessor.joblib     # Data preprocessor
+│   │       ├── cluster_label_map.json  # Cluster-to-label mapping
+│   │       └── feature_defaults.json   # Default feature values
+│   ├── requirements.txt         # Python dependencies
+│   ├── pyproject.toml          # Python project metadata
+│   └── README.md               # Backend-specific documentation
+│
+├── 📂 frontend/                   # React + Vite Frontend
+│   ├── 📂 src/                   # React source code
+│   │   ├── main.jsx             # React entry point
+│   │   └── 📂 portal/           # Portal components
+│   │       ├── App.jsx          # Main portal React component
+│   │       └── style.css        # Futuristic UI styles
+│   ├── 📂 public/                # Static assets (favicon, etc.)
+│   ├── index.html               # Homepage (pure HTML/CSS/JS)
+│   ├── portal.html              # Portal entry point (React mount)
+│   ├── package.json             # Node.js dependencies
+│   ├── package-lock.json        # Locked dependencies
+│   ├── vercel.json              # Vercel deployment config
+│   └── README.md                # Frontend-specific documentation
+│
+├── 📂 data/                       # Data storage
+│   ├── 📂 raw/                   # Original source data
+│   │   └── UCS-Satellite-Database-5-1-2023.xlsx
+│   ├── 📂 processed/             # Processed/classified data
+│   │   ├── satellites_classified.csv     # ML classification output
+│   │   └── portal_requests.jsonl         # Client requests log (JSON Lines)
+│   └── README.md                 # Data documentation
+│
+├── 📂 solicitacoes/               # Client request reports (human-readable)
+│   └── solicitacao_*.txt         # Bilingual TXT reports (EN/PT)
+│
+├── 📂 docs/                       # Additional documentation
+│   └── README.md                 # Documentation index
+│
+├── 📄 .gitignore                  # Git ignore rules
+├── 📄 LICENSE                     # MIT License
+├── 📄 README.md                   # Main project documentation (EN/PT)
+├── 📄 DEPLOYMENT.md               # Deployment guide (Railway/Vercel)
+├── 📄 GITHUB_SETUP.md             # Git/GitHub setup instructions
+├── 📄 START_SERVERS.md            # Quick start guide
+├── 📄 PROJECT_STRUCTURE.md        # This file - detailed structure docs
+├── 📄 PUSH_TO_GITHUB.ps1          # Automated Git push script
+└── 📄 requirements.txt            # Root Python dependencies (optional)
+```
+
+---
+
+## 📋 File Descriptions
+
+### **Root Level Files**
+
+| File | Purpose | Required |
+|------|---------|----------|
+| `README.md` | Main project documentation (bilingual EN/PT) | ✅ Essential |
+| `LICENSE` | MIT License | ✅ Essential |
+| `.gitignore` | Git exclusion rules | ✅ Essential |
+| `DEPLOYMENT.md` | Deployment instructions (Railway, Vercel) | ⚠️ Recommended |
+| `GITHUB_SETUP.md` | Git/GitHub configuration guide | ⚠️ Recommended |
+| `START_SERVERS.md` | Quick start guide for development | ⚠️ Recommended |
+| `PROJECT_STRUCTURE.md` | Detailed structure documentation | ⚠️ Recommended |
+| `PUSH_TO_GITHUB.ps1` | Automated Git push script (Windows) | 🔄 Optional |
+| `requirements.txt` | Root Python dependencies (fallback) | 🔄 Optional |
+
+---
+
+### **Backend (`backend/`)**
+
+#### **Core Application (`backend/app/`)**
+
+| File | Purpose | Type |
+|------|---------|------|
+| `main.py` | FastAPI application, API endpoints, CORS | 🐍 Python |
+| `data_access.py` | Data loading, filtering, persistence | 🐍 Python |
+| `features.py` | Feature engineering for ML pipeline | 🐍 Python |
+| `train.py` | Train KMeans model, save artifacts | 🐍 Python |
+| `predict.py` | Generate classifications from trained model | 🐍 Python |
+| `__init__.py` | Package initializer | 🐍 Python |
+
+#### **ML Models (`backend/app/models/`)**
+
+| File | Purpose | Generated By |
+|------|---------|--------------|
+| `kmeans.joblib` | Trained KMeans clustering model | `train.py` |
+| `preprocessor.joblib` | ColumnTransformer for data preprocessing | `train.py` |
+| `cluster_label_map.json` | Cluster ID → Label (GOLD/SILVER/BRONZE) | `train.py` |
+| `feature_defaults.json` | Default values for missing features | `train.py` |
+
+#### **Configuration**
+
+| File | Purpose |
+|------|---------|
+| `requirements.txt` | Python dependencies (FastAPI, scikit-learn, pandas) |
+| `pyproject.toml` | Python project metadata (PEP 518) |
+| `README.md` | Backend-specific documentation |
+
+---
+
+### **Frontend (`frontend/`)**
+
+#### **Source Code (`frontend/src/`)**
+
+| File | Purpose | Type |
+|------|---------|------|
+| `main.jsx` | React entry point | ⚛️ React |
+| `portal/App.jsx` | Main portal component (form, filters, results) | ⚛️ React |
+| `portal/style.css` | Futuristic UI styles (dark theme, neon) | 🎨 CSS |
+
+#### **Root Files**
+
+| File | Purpose | Type |
+|------|---------|------|
+| `index.html` | Homepage (pure HTML/CSS/JS) | 🌐 HTML |
+| `portal.html` | Portal entry point (mounts React app) | 🌐 HTML |
+| `package.json` | Node.js dependencies & scripts | 📦 Node |
+| `vercel.json` | Vercel deployment configuration | ⚙️ Config |
+| `README.md` | Frontend-specific documentation | 📄 Docs |
+
+---
+
+### **Data (`data/`)**
+
+#### **Directory Structure**
+
+| Directory | Contents | Purpose |
+|-----------|----------|---------|
+| `raw/` | `UCS-Satellite-Database-5-1-2023.xlsx` | Original UCS satellite database |
+| `processed/` | `satellites_classified.csv` | ML classification output (cached) |
+| `processed/` | `portal_requests.jsonl` | Client requests (JSON Lines format) |
+
+---
+
+### **Client Requests (`solicitacoes/`)**
+
+- **Format:** Human-readable TXT files
+- **Naming:** `solicitacao_{ClientName}_{YYYYMMDD_HHMMSS}.txt`
+- **Languages:** Bilingual (EN/PT) based on client selection
+- **Contents:**
+  - Client information (name, company ID, address, email, sector, country)
+  - Request details (purpose, classification, delivery, description)
+  - Selected satellites (name, purpose, classification, operator, etc.)
+
+---
+
+## 🗑️ Removed Files/Directories
+
+The following were **removed** during cleanup:
+
+| Removed Item | Reason |
+|--------------|--------|
+| `backend/backend/` | Duplicate directory (nested error) |
+| `backend/data/` | Duplicate data (consolidated in `/data`) |
+| `backend/solicitacoes/` | Moved to root `/solicitacoes` |
+| `backend/test_filter.py` | Debug script (not needed) |
+| `backend/tests/` | Empty test directory |
+| `data/processed/*Copy*.csv` | Backup files (not needed in Git) |
+| `data/raw/~$*.xlsx` | Excel lock files |
+| `data/external/` | Empty directory |
+| `frontend/.a/` | Temporary folder |
+| `frontend/index - Copy.html` | Backup file |
+| `frontend/src/index.html` | Unused file (index.html in root used) |
+| `infra/` | Infrastructure not configured (Docker/K8s/Terraform) |
+| `scripts/dev.ps1` | Empty/unused script |
+| `output.txt` | Temporary debug output |
+| `satcat.csv` | Old/unused satellite catalog |
+| `start_backend.py` | Replaced by `START_SERVERS.md` |
+| `index.html` (root) | Moved to `frontend/index.html` |
+| `ler_satcat.py` | Old test script |
+
+---
+
+## 🚀 How to Run
+
+### **1. Train the ML Model (First Time Only)**
+```bash
+cd backend
+python -m app.train
+python -m app.predict
+```
+
+### **2. Start Backend**
+```bash
+cd backend
+python -m uvicorn app.main:app --port 8000 --reload
+```
+
+### **3. Start Frontend**
+```bash
+cd frontend
+npm install  # First time only
+npm run dev -- --host --port 5173
+```
+
+### **4. Access Application**
+- Homepage: http://localhost:5173/
+- Portal: http://localhost:5173/portal.html
+- API Docs: http://localhost:8000/docs
+
+---
+
+## 📊 Data Flow
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 1. DATA INGESTION                                           │
+│    data/raw/UCS-Satellite-Database-5-1-2023.xlsx           │
+│                          │                                   │
+│                          ▼                                   │
+│    backend/app/features.py (Feature Engineering)           │
+└─────────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 2. MODEL TRAINING                                           │
+│    backend/app/train.py                                     │
+│    ├── Preprocessor (ColumnTransformer)                    │
+│    ├── KMeans Clustering (n_clusters=3)                    │
+│    └── Cluster-to-Label Mapping                            │
+│                          │                                   │
+│                          ▼                                   │
+│    backend/app/models/*.joblib (Saved Models)              │
+└─────────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 3. CLASSIFICATION                                           │
+│    backend/app/predict.py                                   │
+│                          │                                   │
+│                          ▼                                   │
+│    data/processed/satellites_classified.csv                │
+└─────────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+┌─────────────────────────────────────────────────────────────┐
+│ 4. API & PORTAL                                             │
+│    backend/app/main.py (FastAPI)                           │
+│    frontend/src/portal/App.jsx (React)                     │
+│                          │                                   │
+│                          ▼                                   │
+│    ├── GET /satellites (Filtered Results)                  │
+│    └── POST /portal/request (Submit Request)               │
+│                          │                                   │
+│                          ▼                                   │
+│    ├── data/processed/portal_requests.jsonl (Log)         │
+│    └── solicitacoes/*.txt (Human-readable Reports)         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🔐 Security Notes
+
+### **Sensitive Data (DO NOT commit to Git):**
+- `.env` files
+- API keys
+- Database credentials
+- Lock files (`~$*.xlsx`)
+- Personal client data in `solicitacoes/` (already gitignored)
+
+### **Safe to Commit:**
+- ML model artifacts (`*.joblib`)
+- Source data (`UCS-Satellite-Database-5-1-2023.xlsx`)
+- Processed classifications (`satellites_classified.csv`)
+
+---
+
+## 📝 Maintenance
+
+### **Regular Tasks:**
+1. **Update Models:** Re-run `train.py` and `predict.py` when new satellite data is available
+2. **Clean Logs:** Periodically archive old request files in `solicitacoes/`
+3. **Update Dependencies:** `pip install -U -r requirements.txt` and `npm update`
+4. **Backup Data:** Keep backups of `data/raw/` and `backend/app/models/`
+
+### **Deployment:**
+- See `DEPLOYMENT.md` for Railway (backend) and Vercel (frontend) instructions
+
+---
+
+<div align="center">
+
+**🛰️ OrbitHub - Clean, organized, and production-ready!**
+
+</div>
+

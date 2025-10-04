@@ -93,10 +93,27 @@ Thumbs.db
 *.bak
 *.swp
 *~
+output.txt
+*Copy*.html
+*Copy*.csv
+
+# Excel temp files
+~$*.xlsx
+~$*.xls
 
 # Build files
 *.pyc
 *.pyo
 *.pyd
 .cache/
+
+# Unused directories (infrastructure not configured)
+infra/
+scripts/dev.ps1
+
+# Duplicate directories
+backend/backend/
+backend/data/
+backend/solicitacoes/
+frontend/.a/
 
