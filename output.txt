@@ -1,0 +1,112 @@
+EXPLORADOR DE DADOS SATCAT
+============================================================
+Carregando dados do arquivo satcat.csv...
+============================================================
+INFORMACOES GERAIS:
+   - Total de registros: 65,651
+   - Total de colunas: 17
+   - Tamanho do arquivo: 6.0 MB
+
+COLUNAS DISPONIVEIS:
+    1. OBJECT_NAME
+    2. OBJECT_ID
+    3. NORAD_CAT_ID
+    4. OBJECT_TYPE
+    5. OPS_STATUS_CODE
+    6. OWNER
+    7. LAUNCH_DATE
+    8. LAUNCH_SITE
+    9. DECAY_DATE
+   10. PERIOD
+   11. INCLINATION
+   12. APOGEE
+   13. PERIGEE
+   14. RCS
+   15. DATA_STATUS_CODE
+   16. ORBIT_CENTER
+   17. ORBIT_TYPE
+
+PRIMEIRAS 10 LINHAS:
+------------------------------------------------------------
+OBJECT_NAME OBJECT_ID  NORAD_CAT_ID OBJECT_TYPE OPS_STATUS_CODE OWNER LAUNCH_DATE LAUNCH_SITE DECAY_DATE  PERIOD  INCLINATION  APOGEE  PERIGEE    RCS DATA_STATUS_CODE ORBIT_CENTER ORBIT_TYPE
+   SL-1 R/B 1957-001A             1         R/B               D   CIS  1957-10-04       TYMSC 1957-12-01   96.19        65.10   938.0    214.0 20.420              NaN           EA        IMP
+  SPUTNIK 1 1957-001B             2         PAY               D   CIS  1957-10-04       TYMSC 1958-01-03   96.10        65.00  1080.0     64.0    NaN              NaN           EA        IMP
+  SPUTNIK 2 1957-002A             3         PAY               D   CIS  1957-11-03       TYMSC 1958-04-14  103.74        65.33  1659.0    211.0  0.080              NaN           EA        IMP
+ EXPLORER 1 1958-001A             4         PAY               D    US  1958-02-01       AFETR 1970-03-31   88.48        33.15   215.0    183.0    NaN              NaN           EA        IMP
+ VANGUARD 1 1958-002B             5         PAY             NaN    US  1958-03-17       AFETR        NaN  132.61        34.25  3822.0    649.0  0.122              NaN           EA        ORB
+ EXPLORER 3 1958-003A             6         PAY               D    US  1958-03-26       AFETR 1958-06-28  151.74        19.24  5985.0    107.0    NaN              NaN           EA        IMP
+   SL-1 R/B 1958-004A             7         R/B               D   CIS  1958-05-15       TYMSC 1958-12-03  102.74        65.14  1571.0    206.0    NaN              NaN           EA        IMP
+  SPUTNIK 3 1958-004B             8         PAY               D   CIS  1958-05-15       TYMSC 1960-04-06   88.43        65.06   255.0    139.0 11.840              NaN           EA        IMP
+ EXPLORER 4 1958-005A             9         PAY               D    US  1958-07-26       AFETR 1959-10-23   92.81        50.25   585.0    239.0    NaN              NaN           EA        IMP
+      SCORE 1958-006A            10         PAY               D    US  1958-12-18       AFETR 1959-01-21   98.21        32.29  1187.0    159.0    NaN              NaN           EA        IMP
+
+ESTATISTICAS BASICAS:
+------------------------------------------------------------
+           OBJECT_NAME  OBJECT_ID  ...  ORBIT_CENTER ORBIT_TYPE
+count            65651      65651  ...         65651      65651
+unique           24645      65651  ...            17          4
+top     FENGYUN 1C DEB  1957-001A  ...            EA        IMP
+freq              3531          1  ...         65223      33710
+mean               NaN        NaN  ...           NaN        NaN
+std                NaN        NaN  ...           NaN        NaN
+min                NaN        NaN  ...           NaN        NaN
+25%                NaN        NaN  ...           NaN        NaN
+50%                NaN        NaN  ...           NaN        NaN
+75%                NaN        NaN  ...           NaN        NaN
+max                NaN        NaN  ...           NaN        NaN
+
+[11 rows x 17 columns]
+
+VALORES NULOS POR COLUNA:
+------------------------------------------------------------
+   OPS_STATUS_CODE: 16,812 (25.6%)
+   DECAY_DATE: 31,514 (48.0%)
+   PERIOD: 930 (1.4%)
+   INCLINATION: 930 (1.4%)
+   APOGEE: 930 (1.4%)
+   PERIGEE: 930 (1.4%)
+   RCS: 32,720 (49.8%)
+   DATA_STATUS_CODE: 64,399 (98.1%)
+
+DISTRIBUICAO POR TIPO DE OBJETO:
+------------------------------------------------------------
+   DEB: 35,733
+   PAY: 23,016
+   R/B: 6,746
+   UNK: 156
+
+TOP 10 PAISES/OWNERS:
+------------------------------------------------------------
+   US: 25,270
+   CIS: 25,131
+   PRC: 8,746
+   FR: 1,474
+   JPN: 884
+   IND: 764
+   UK: 749
+   TBD: 206
+   ESA: 169
+   ITSO: 139
+
+STATUS OPERACIONAL:
+------------------------------------------------------------
+   D: 34,137
+   +: 12,860
+   -: 1,462
+   P: 336
+   B: 22
+   X: 16
+   S: 6
+
+ULTIMAS 5 LINHAS:
+------------------------------------------------------------
+         OBJECT_NAME OBJECT_ID  NORAD_CAT_ID OBJECT_TYPE OPS_STATUS_CODE OWNER LAUNCH_DATE LAUNCH_SITE DECAY_DATE  PERIOD  INCLINATION  APOGEE  PERIGEE  RCS DATA_STATUS_CODE ORBIT_CENTER ORBIT_TYPE
+HULIANWANG DIGUI 11E 2025-220E         65821         PAY               +   PRC  2025-09-27       TAISC        NaN  105.15        86.50  1006.0    996.0  NaN              NaN           EA        ORB
+           CZ-6A R/B 2025-220F         65822         R/B             NaN   PRC  2025-09-27       TAISC        NaN  103.29        86.51   991.0    837.0  NaN              NaN           EA        ORB
+         SHIYAN-30 A 2025-222A         65851         PAY               +   PRC  2025-09-29       XICLF        NaN   96.43        34.99   592.0    584.0  NaN              NaN           EA        ORB
+         SHIYAN-30 B 2025-222B         65852         PAY               +   PRC  2025-09-29       XICLF        NaN   96.42        35.00   590.0    584.0  NaN              NaN           EA        ORB
+           CZ-2D R/B 2025-222C         65853         R/B             NaN   PRC  2025-09-29       XICLF        NaN   96.06        34.90   609.0    530.0  NaN              NaN           EA        ORB
+
+Dados carregados e exibidos com sucesso!
+
+Deseja usar o menu interativo para explorar os dados? (s/n): 
