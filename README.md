@@ -717,6 +717,6 @@ Este projeto está licenciado sob a **Licença MIT** - veja [LICENSE](./LICENSE)
 
 <div align="center">
 
-**Feito com ❤️ para um futuro espacial sustentável**
+**Feito para um futuro espacial sustentável**
 
 </div>
