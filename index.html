@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en" data-lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OrbitHub • Marketplace de Dados de Satélites</title>
-  <meta name="description" content="OrbitHub é o marketplace futurista de dados de satélites — descubra coleções, APIs e insights com pegada sustentável." />
+  <title id="meta-title">OrbitHub • Satellite Data Marketplace</title>
+  <meta id="meta-desc" name="description" content="OrbitHub is the futuristic marketplace for satellite data — discover collections, APIs, and insights with a sustainable edge." />
   <meta name="theme-color" content="#0ff" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,6 +50,9 @@
     .nav-links a{padding:8px 12px; border-radius:12px; text-decoration:none; color:var(--txt); opacity:.9}
     .nav-links a:hover{background:var(--panel)}
     .cta{background: linear-gradient(135deg, var(--brand), var(--accent)); color:#001015; font-weight:700; box-shadow: 0 8px 24px rgba(0,255,240,.25);}
+    .lang-switch{display:flex; gap:6px; align-items:center; margin-right:4px}
+    .lang{border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06); color:var(--txt); padding:6px 10px; border-radius:10px; cursor:pointer}
+    .lang.active{background:rgba(255,255,255,.18)}
 
     /* HERO */
     .hero{display:grid; grid-template-columns: 1.2fr 1fr; gap:var(--grid-gap); align-items:center; padding: clamp(36px, 6vw, 72px) 0}
@@ -134,37 +137,41 @@
   <canvas id="space" class="space" aria-hidden="true"></canvas>
   <div class="grid-overlay" aria-hidden="true"></div>
 
-  <nav aria-label="Principal">
+  <nav aria-label="Main">
     <div class="container nav-inner">
       <div class="logo" aria-label="OrbitHub">
         <span class="orb" aria-hidden="true"></span>
         <span>OrbitHub</span>
       </div>
       <div class="nav-links">
-        <a href="#datasets">Explorar</a>
-        <a href="#solucoes">Soluções</a>
-        <a href="#precos">Preços</a>
-        <a href="#sustentabilidade">Sustentabilidade</a>
-        <a class="cta" href="#comece">Começar</a>
+        <a id="nav-explore" href="#datasets">Explore</a>
+        <a id="nav-solutions" href="#solucoes">Solutions</a>
+        <a id="nav-pricing" href="#precos">Pricing</a>
+        <a id="nav-sustain" href="#sustentabilidade">Sustainability</a>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button id="lang-en" class="lang active" aria-pressed="true">EN</button>
+          <button id="lang-pt" class="lang" aria-pressed="false">PT</button>
+        </div>
+        <a id="nav-cta" class="cta" href="#comece">Get Started</a>
       </div>
     </div>
   </nav>
 
   <header class="container hero" id="topo">
     <div>
-      <span class="badge">⚡ Beta Aberto • APIs & Amostras</span>
-      <h1><span class="neon">Marketplace de Dados de Satélites</span> para um planeta mais inteligente e sustentável.</h1>
-      <p class="sub">Descubra coleções multi‑fonte, aplique filtros inteligentes e consuma via API. Transparência de impacto climático em cada requisição.</p>
+      <span id="badge-text" class="badge">⚡ Open Beta • APIs & Samples</span>
+      <h1 id="hero-title"><span class="neon">Satellite Data Marketplace</span> for a smarter, more sustainable planet.</h1>
+      <p id="hero-sub" class="sub">Discover multi‑source collections, apply smart filters, and consume via API. Carbon impact transparency in every request.</p>
 
-      <form class="searchbar" role="search" aria-label="Buscar datasets" onsubmit="event.preventDefault(); document.querySelector('#datasets').scrollIntoView({behavior:'smooth'});">
-        <input placeholder="Buscar por satélite, missão, banda espectral…" aria-label="Buscar" />
-        <button type="submit" title="Buscar">🔎</button>
-        <button type="button" title="Filtro rápido" onclick="toggleFilters()">⛭</button>
+      <form class="searchbar" role="search" aria-label="Search datasets" onsubmit="event.preventDefault(); document.querySelector('#datasets').scrollIntoView({behavior:'smooth'});">
+        <input id="search-input" placeholder="Search by satellite, mission, spectral band…" aria-label="Search" />
+        <button id="search-btn" type="submit" title="Search">🔎</button>
+        <button id="filter-btn" type="button" title="Quick filter" onclick="toggleFilters()">⛭</button>
       </form>
       <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap">
-        <span class="chip">🌿 Carbon‑aware</span>
-        <span class="chip" style="background: rgba(138,43,226,.14); color:#c9a7ff">🛰️ 120+ satélites</span>
-        <span class="chip" style="background: rgba(0,209,255,.14); color:#9be8ff">📦 Amostras incluídas</span>
+        <span id="chip-carbon" class="chip">🌿 Carbon‑aware</span>
+        <span id="chip-sats" class="chip" style="background: rgba(138,43,226,.14); color:#c9a7ff">🛰️ 120+ satellites</span>
+        <span id="chip-samples" class="chip" style="background: rgba(0,209,255,.14); color:#9be8ff">📦 Samples included</span>
       </div>
     </div>
     <div aria-hidden="true" class="globe-wrap">
@@ -178,185 +185,185 @@
 
   <main>
     <section class="container section" id="solucoes">
-      <div class="kicker">Por que OrbitHub?</div>
-      <h2 class="title">Filtros inteligentes, APIs unificadas e impacto mensurável.</h2>
+      <div id="sol-kicker" class="kicker">Why OrbitHub?</div>
+      <h2 id="sol-title" class="title">Smart filters, unified APIs, and measurable impact.</h2>
       <div class="cards">
-        <article class="card" aria-label="Descoberta">
-          <h3>Descoberta Inteligente</h3>
-          <p>Filtre por <strong>resolução</strong>, <strong>banda</strong>, <strong>cobertura</strong> e <strong>janela temporal</strong> com recomendações guiadas por IA.</p>
+        <article class="card" aria-label="Discovery">
+          <h3 id="sol1-h">Smart Discovery</h3>
+          <p id="sol1-p">Filter by <strong>resolution</strong>, <strong>band</strong>, <strong>coverage</strong>, and <strong>time window</strong> with AI‑guided recommendations.</p>
         </article>
-        <article class="card" aria-label="Consumo">
-          <h3>Consumo via API</h3>
-          <p>SDKs prontos (Python/JS) e limites previsíveis. <em>Pay‑as‑you‑go</em> com cota livre mensal.</p>
+        <article class="card" aria-label="Consumption">
+          <h3 id="sol2-h">API Consumption</h3>
+          <p id="sol2-p">Ready‑to‑use SDKs (Python/JS) and predictable limits. <em>Pay‑as‑you‑go</em> with a free monthly quota.</p>
         </article>
-        <article class="card" aria-label="Sustentabilidade">
-          <h3>Métrica de Carbono</h3>
-          <p>Indicamos emissão estimada por consulta, data center e região. Otimize <abbr title="Sustentabilidade">SUS</abbr> sem perder performance.</p>
+        <article class="card" aria-label="Sustainability">
+          <h3 id="sol3-h">Carbon Metric</h3>
+          <p id="sol3-p">We show estimated emissions by request, data center, and region. Optimize <abbr id="abbr-sus" title="Sustainability">SUS</abbr> without sacrificing performance.</p>
         </article>
       </div>
     </section>
 
     <section class="container section" id="datasets">
-      <div class="kicker">Coleções em destaque</div>
-      <h2 class="title">Explore datasets prontos para teste</h2>
+      <div id="ds-kicker" class="kicker">Featured collections</div>
+      <h2 id="ds-title" class="title">Explore datasets ready to try</h2>
       <div class="datasets" role="list">
         <div class="dataset" role="listitem">
           <div class="icon">S1</div>
           <div>
             <strong>Sentinel‑1 SAR</strong>
-            <div><small>Radar de abertura sintética • Res. 10m • Órbita: LEO</small></div>
+            <div><small id="s1-desc">Synthetic aperture radar • Res. 10 m • Orbit: LEO</small></div>
           </div>
-          <a class="btn" href="#" onclick="demoToast('Solicitado: Sentinel-1 (amostra)')">Ver amostra</a>
+          <a id="s1-btn" class="btn" href="#" onclick="toastSample('Sentinel-1')">View sample</a>
         </div>
         <div class="dataset" role="listitem">
           <div class="icon">L8</div>
           <div>
             <strong>Landsat‑8 OLI/TIRS</strong>
-            <div><small>Multiespectral • 15–100m • Termal</small></div>
+            <div><small id="l8-desc">Multispectral • 15–100 m • Thermal</small></div>
           </div>
-          <a class="btn" href="#" onclick="demoToast('Solicitado: Landsat-8 (amostra)')">Ver amostra</a>
+          <a id="l8-btn" class="btn" href="#" onclick="toastSample('Landsat-8')">View sample</a>
         </div>
         <div class="dataset" role="listitem">
           <div class="icon">S2</div>
           <div>
             <strong>Sentinel‑2 MSI</strong>
-            <div><small>13 bandas • 10–60m • Índices de vegetação</small></div>
+            <div><small id="s2-desc">13 bands • 10–60 m • Vegetation indices</small></div>
           </div>
-          <a class="btn" href="#" onclick="demoToast('Solicitado: Sentinel-2 (amostra)')">Ver amostra</a>
+          <a id="s2-btn" class="btn" href="#" onclick="toastSample('Sentinel-2')">View sample</a>
         </div>
         <div class="dataset" role="listitem">
           <div class="icon">C1</div>
           <div>
             <strong>CBERS‑4A WPM</strong>
-            <div><small>Brasil/China • 2m pancrom. • 8m multiesp.</small></div>
+            <div><small id="c1-desc">Brazil/China • 2 m pan • 8 m multispec.</small></div>
           </div>
-          <a class="btn" href="#" onclick="demoToast('Solicitado: CBERS-4A (amostra)')">Ver amostra</a>
+          <a id="c1-btn" class="btn" href="#" onclick="toastSample('CBERS-4A')">View sample</a>
         </div>
       </div>
     </section>
 
     <section class="container section" id="como">
-      <div class="kicker">Como funciona</div>
-      <h2 class="title">Da busca ao insight em minutos</h2>
+      <div id="how-kicker" class="kicker">How it works</div>
+      <h2 id="how-title" class="title">From search to insight in minutes</h2>
       <div class="steps">
         <div class="step">
           <div class="num">01</div>
-          <h3>Escolha a coleção</h3>
-          <p>Use filtros por sensor, nuvem, resolução, faixa espectral e área.</p>
+          <h3 id="st1-h">Choose a collection</h3>
+          <p id="st1-p">Use filters for sensor, cloud, resolution, spectral range, and area.</p>
         </div>
         <div class="step">
           <div class="num">02</div>
-          <h3>Teste com amostras</h3>
-          <p>Baixe tiles ou visualize no navegador com camadas e índices.</p>
+          <h3 id="st2-h">Try with samples</h3>
+          <p id="st2-p">Download tiles or visualize in‑browser with layers and indices.</p>
         </div>
         <div class="step">
           <div class="num">03</div>
-          <h3>Conecte a API</h3>
-          <p>Token, endpoint e <code>curl</code> gerados automaticamente.</p>
+          <h3 id="st3-h">Connect the API</h3>
+          <p id="st3-p">Token, endpoint, and <code>curl</code> generated automatically.</p>
         </div>
         <div class="step">
           <div class="num">04</div>
-          <h3>Monitore o impacto</h3>
-          <p>Custos, latência e carbono estimado por consulta — em tempo real.</p>
+          <h3 id="st4-h">Monitor impact</h3>
+          <p id="st4-p">Costs, latency, and estimated carbon per request — in real time.</p>
         </div>
       </div>
     </section>
 
     <section class="container section" id="sustentabilidade">
-      <div class="kicker">Compromisso</div>
-      <h2 class="title">Sustentabilidade embutida no design</h2>
+      <div id="sus-kicker" class="kicker">Commitment</div>
+      <h2 id="sus-title" class="title">Sustainability designed‑in</h2>
       <div class="stats">
-        <div class="stat"><small>Offset anual</small><h2 data-count="120">0</h2><p>t CO₂ compensadas</p></div>
-        <div class="stat"><small>Regiões verdes</small><h2 data-count="9">0</h2><p>data centers com energia renovável</p></div>
-        <div class="stat"><small>Requisições eco‑otimizadas</small><h2 data-count="87">0</h2><p>% com roteamento carbon‑aware</p></div>
-        <div class="stat"><small>Projetos SDG</small><h2 data-count="32">0</h2><p>iniciativas alinhadas à ONU</p></div>
+        <div class="stat"><small id="stat1-small">Annual offset</small><h2 data-count="120">0</h2><p id="stat1-p">t CO₂ offset</p></div>
+        <div class="stat"><small id="stat2-small">Green regions</small><h2 data-count="9">0</h2><p id="stat2-p">data centers on renewables</p></div>
+        <div class="stat"><small id="stat3-small">Eco‑optimized requests</small><h2 data-count="87">0</h2><p id="stat3-p">% with carbon‑aware routing</p></div>
+        <div class="stat"><small id="stat4-small">SDG projects</small><h2 data-count="32">0</h2><p id="stat4-p">initiatives aligned with the UN</p></div>
       </div>
     </section>
 
     <section class="container section" id="precos">
-      <div class="kicker">Planos</div>
-      <h2 class="title">Preços simples e previsíveis</h2>
+      <div id="pricing-kicker" class="kicker">Plans</div>
+      <h2 id="pricing-title" class="title">Simple, predictable pricing</h2>
       <div class="pricing">
         <div class="plan">
-          <h3>Explorador</h3>
-          <div class="price">R$ 0</div>
-          <small>/mês</small>
+          <h3 id="pl1-name">Explorer</h3>
+          <div id="pl1-price" class="price">R$ 0</div>
+          <small id="pl1-month">/month</small>
           <ul>
-            <li>1.000 chamadas/mês</li>
-            <li>Amostras gratuitas</li>
-            <li>Dashboard básico</li>
+            <li id="pl1-li1">1,000 calls/month</li>
+            <li id="pl1-li2">Free samples</li>
+            <li id="pl1-li3">Basic dashboard</li>
           </ul>
-          <p><a class="btn" href="#comece">Começar grátis</a></p>
+          <p><a id="pl1-btn" class="btn" href="#comece">Start free</a></p>
         </div>
         <div class="plan" style="border-color: rgba(0,255,240,.35)">
-          <h3>Profissional</h3>
-          <div class="price">R$ 399</div>
-          <small>/mês</small>
+          <h3 id="pl2-name">Professional</h3>
+          <div id="pl2-price" class="price">R$ 399</div>
+          <small id="pl2-month">/month</small>
           <ul>
-            <li>100k chamadas/mês</li>
-            <li>Webhooks + SLA</li>
-            <li>Roteamento eco‑aware</li>
+            <li id="pl2-li1">100k calls/month</li>
+            <li id="pl2-li2">Webhooks + SLA</li>
+            <li id="pl2-li3">Carbon‑aware routing</li>
           </ul>
-          <p><a class="btn" href="#comece">Assinar</a></p>
+          <p><a id="pl2-btn" class="btn" href="#comece">Subscribe</a></p>
         </div>
         <div class="plan">
-          <h3>Enterprise</h3>
-          <div class="price">Custom</div>
+          <h3 id="pl3-name">Enterprise</h3>
+          <div id="pl3-price" class="price">Custom</div>
           <ul>
-            <li>Contratos e dados privados</li>
-            <li>On‑prem / Multi‑cloud</li>
-            <li>Suporte 24/7</li>
+            <li id="pl3-li1">Private data & contracts</li>
+            <li id="pl3-li2">On‑prem / Multi‑cloud</li>
+            <li id="pl3-li3">24/7 support</li>
           </ul>
-          <p><a class="btn" href="#comece">Fale com vendas</a></p>
+          <p><a id="pl3-btn" class="btn" href="#comece">Talk to sales</a></p>
         </div>
       </div>
     </section>
 
     <section class="container section" id="faq">
-      <div class="kicker">Dúvidas</div>
-      <h2 class="title">Perguntas frequentes</h2>
+      <div id="faq-kicker" class="kicker">FAQ</div>
+      <h2 id="faq-title" class="title">Frequently asked questions</h2>
       <div class="faq">
         <details>
-          <summary>Como vocês calculam a estimativa de carbono?</summary>
-          <p>Combinamos métricas de energia por região do provedor + intensidade de carbono da grade elétrica para estimar emissões por GB transferido e CPU/GPU‑s.</p>
+          <summary id="q1">How do you estimate carbon?</summary>
+          <p id="a1">We combine energy metrics per cloud region + grid carbon intensity to estimate emissions per GB transferred and CPU/GPU‑s.</p>
         </details>
         <details>
-          <summary>Posso trazer meu próprio bucket ou data lake?</summary>
-          <p>Sim. Suportamos BYO‑Storage (S3, GCS, ADLS) com indexação assíncrona e chaves KMS do cliente.</p>
+          <summary id="q2">Can I bring my own bucket or data lake?</summary>
+          <p id="a2">Yes. We support BYO‑Storage (S3, GCS, ADLS) with async indexing and customer‑managed KMS keys.</p>
         </details>
         <details>
-          <summary>Há amostras públicas para testes?</summary>
-          <p>Sim, a maioria das coleções possui tiles e <em>notebooks</em> prontos para você experimentar.</p>
+          <summary id="q3">Are there public samples?</summary>
+          <p id="a3">Yes, most collections include tiles and ready‑to‑run notebooks for you to try.</p>
         </details>
         <details>
-          <summary>Como funciona o ranque Ouro/Prata/Bronze?</summary>
-          <p>Classificamos por completude de metadados, confiabilidade de atualização, cobertura e qualidade validada.</p>
+          <summary id="q4">How does the Gold/Silver/Bronze rank work?</summary>
+          <p id="a4">We rank by metadata completeness, update reliability, coverage, and validated quality.</p>
         </details>
       </div>
     </section>
 
     <section class="container section" id="comece">
-      <div class="kicker">Pronto para decolar?</div>
-      <h2 class="title">Solicite acesso ao beta</h2>
-      <form class="cards" onsubmit="event.preventDefault(); demoToast('Pedido enviado! 🚀'); this.reset();">
+      <div id="cta-kicker" class="kicker">Ready for liftoff?</div>
+      <h2 id="cta-title" class="title">Request beta access</h2>
+      <form class="cards" onsubmit="event.preventDefault(); demoToast(t('toast.request_sent')); this.reset();">
         <div class="card" style="grid-column: span 8">
-          <h3>Seus dados</h3>
+          <h3 id="cta-info-title">Your info</h3>
           <div class="row" style="display:grid; grid-template-columns: repeat(12,1fr); gap:12px">
-            <input aria-label="Nome" style="grid-column: span 6" placeholder="Nome" required />
-            <input aria-label="Email" style="grid-column: span 6" placeholder="Email" type="email" required />
-            <input aria-label="Empresa" style="grid-column: span 6" placeholder="Empresa" />
-            <input aria-label="Uso principal" style="grid-column: span 6" placeholder="Uso principal (ex: monitorar desmatamento)" />
-            <textarea aria-label="Mensagem" style="grid-column: span 12; min-height:100px" placeholder="Conte seu caso de uso"></textarea>
+            <input id="in-name" aria-label="Name" style="grid-column: span 6" placeholder="Name" required />
+            <input id="in-email" aria-label="Email" style="grid-column: span 6" placeholder="Email" type="email" required />
+            <input id="in-company" aria-label="Company" style="grid-column: span 6" placeholder="Company" />
+            <input id="in-primary" aria-label="Primary use" style="grid-column: span 6" placeholder="Primary use (e.g., monitor deforestation)" />
+            <textarea id="in-msg" aria-label="Message" style="grid-column: span 12; min-height:100px" placeholder="Tell us about your use case"></textarea>
           </div>
         </div>
         <div class="card" style="grid-column: span 4; display:flex; flex-direction:column; gap:12px; justify-content:space-between">
           <div>
-            <h3>Preferências</h3>
-            <label style="display:flex; gap:10px; align-items:center"><input type="checkbox" checked/> Quero API first</label>
-            <label style="display:flex; gap:10px; align-items:center"><input type="checkbox"/> Compliance ESG</label>
-            <label style="display:flex; gap:10px; align-items:center"><input type="checkbox"/> Dados premium</label>
+            <h3 id="cta-pref-title">Preferences</h3>
+            <label style="display:flex; gap:10px; align-items:center"><input type="checkbox" checked/><span id="pref-api">I want API first</span></label>
+            <label style="display:flex; gap:10px; align-items:center"><input type="checkbox"/><span id="pref-esg">ESG compliance</span></label>
+            <label style="display:flex; gap:10px; align-items:center"><input type="checkbox"/><span id="pref-premium">Premium data</span></label>
           </div>
-          <button class="btn" type="submit">Solicitar acesso</button>
+          <button id="cta-submit" class="btn" type="submit">Request access</button>
         </div>
       </form>
     </section>
@@ -366,27 +373,27 @@
     <div class="container foot-grid">
       <div class="foot-col">
         <div class="logo" style="opacity:.9"><span class="orb"></span><span>OrbitHub</span></div>
-        <p style="margin-top:8px">Conectando você ao espaço com responsabilidade ambiental.</p>
+        <p id="foot-tag" style="margin-top:8px">Connecting you to space with environmental responsibility.</p>
       </div>
       <div class="foot-col">
-        <strong>Produto</strong>
-        <a href="#datasets">Explorar</a>
-        <a href="#precos">Planos</a>
-        <a href="#faq">FAQ</a>
+        <strong id="foot-prod">Product</strong>
+        <a id="foot-explore" href="#datasets">Explore</a>
+        <a id="foot-plans" href="#precos">Plans</a>
+        <a id="foot-faq" href="#faq">FAQ</a>
       </div>
       <div class="foot-col">
-        <strong>Empresa</strong>
-        <a href="#">Sobre</a>
-        <a href="#">Carreiras</a>
-        <a href="#">Imprensa</a>
+        <strong id="foot-comp">Company</strong>
+        <a id="foot-about" href="#">About</a>
+        <a id="foot-careers" href="#">Careers</a>
+        <a id="foot-press" href="#">Press</a>
       </div>
       <div class="foot-col">
-        <strong>Contato</strong>
-        <a href="#comece">Solicitar acesso</a>
+        <strong id="foot-contact">Contact</strong>
+        <a id="foot-cta" href="#comece">Request access</a>
         <a href="mailto:hello@orbithub.space">hello@orbithub.space</a>
       </div>
     </div>
-    <div class="container copyright">© <span id="year"></span> OrbitHub. Todos os direitos reservados.</div>
+    <div class="container copyright">© <span id="year"></span> OrbitHub. All rights reserved.</div>
   </footer>
 
   <!-- Toast -->
@@ -402,11 +409,10 @@
     t.textContent = msg; t.style.transform = 'translateX(-50%) translateY(0)';
     clearTimeout(window.__toast); window.__toast = setTimeout(()=> t.style.transform = 'translateX(-50%) translateY(120%)', 2400);
   }
+  function toastSample(name){ demoToast(t('toast.requested') + ': ' + name + ' ' + t('toast.sample')); }
 
   // Show/hide fake filters action (demo only)
-  function toggleFilters(){
-    demoToast('Filtros avançados (demo)');
-  }
+  function toggleFilters(){ demoToast(t('toast.advanced_filters')); }
 
   // Starfield background
   const cvs = document.getElementById('space');
@@ -449,9 +455,219 @@
 
   // Shrink nav on scroll
   const nav = document.querySelector('nav .nav-inner');
-  let last=0; window.addEventListener('scroll', ()=>{
-    const y = window.scrollY; nav.style.padding = y>50? '8px 0' : '14px 0'; last=y;
+  window.addEventListener('scroll', ()=>{
+    const y = window.scrollY; nav.style.padding = y>50? '8px 0' : '14px 0';
   });
+
+  // --- i18n ---
+  const $ = (id)=> document.getElementById(id);
+  const I18N = {
+    en: {
+      meta_title: 'OrbitHub • Satellite Data Marketplace',
+      meta_desc: 'OrbitHub is the futuristic marketplace for satellite data — discover collections, APIs, and insights with a sustainable edge.',
+      nav_explore: 'Explore', nav_solutions: 'Solutions', nav_pricing: 'Pricing', nav_sustain: 'Sustainability', nav_cta: 'Get Started',
+      badge: '⚡ Open Beta • APIs & Samples',
+      hero_title: '<span class="neon">Satellite Data Marketplace</span> for a smarter, more sustainable planet.',
+      hero_sub: 'Discover multi‑source collections, apply smart filters, and consume via API. Carbon impact transparency in every request.',
+      search_ph: 'Search by satellite, mission, spectral band…', search_title: 'Search', filter_title: 'Quick filter',
+      chip_carbon: '🌿 Carbon‑aware', chip_sats: '🛰️ 120+ satellites', chip_samples: '📦 Samples included',
+      sol_kicker: 'Why OrbitHub?', sol_title: 'Smart filters, unified APIs, and measurable impact.',
+      sol1_h: 'Smart Discovery', sol1_p: 'Filter by <strong>resolution</strong>, <strong>band</strong>, <strong>coverage</strong>, and <strong>time window</strong> with AI‑guided recommendations.',
+      sol2_h: 'API Consumption', sol2_p: 'Ready‑to‑use SDKs (Python/JS) and predictable limits. <em>Pay‑as‑you‑go</em> with a free monthly quota.',
+      sol3_h: 'Carbon Metric', sol3_p: 'We show estimated emissions by request, data center, and region. Optimize <abbr id="abbr-sus" title="Sustainability">SUS</abbr> without sacrificing performance.',
+      ds_kicker: 'Featured collections', ds_title: 'Explore datasets ready to try',
+      s1_desc: 'Synthetic aperture radar • Res. 10 m • Orbit: LEO', l8_desc: 'Multispectral • 15–100 m • Thermal', s2_desc: '13 bands • 10–60 m • Vegetation indices', c1_desc: 'Brazil/China • 2 m pan • 8 m multispec.',
+      sample_btn: 'View sample',
+      how_kicker: 'How it works', how_title: 'From search to insight in minutes',
+      st1_h: 'Choose a collection', st1_p: 'Use filters for sensor, cloud, resolution, spectral range, and area.',
+      st2_h: 'Try with samples', st2_p: 'Download tiles or visualize in‑browser with layers and indices.',
+      st3_h: 'Connect the API', st3_p: 'Token, endpoint, and <code>curl</code> generated automatically.',
+      st4_h: 'Monitor impact', st4_p: 'Costs, latency, and estimated carbon per request — in real time.',
+      sus_kicker: 'Commitment', sus_title: 'Sustainability designed‑in',
+      stat1_small: 'Annual offset', stat1_p: 't CO₂ offset',
+      stat2_small: 'Green regions', stat2_p: 'data centers on renewables',
+      stat3_small: 'Eco‑optimized requests', stat3_p: '% with carbon‑aware routing',
+      stat4_small: 'SDG projects', stat4_p: 'initiatives aligned with the UN',
+      pricing_kicker: 'Plans', pricing_title: 'Simple, predictable pricing',
+      pl1_name: 'Explorer', pl1_price: 'R$ 0', pl1_month: '/month', pl1_li1: '1,000 calls/month', pl1_li2: 'Free samples', pl1_li3: 'Basic dashboard', pl1_btn: 'Start free',
+      pl2_name: 'Professional', pl2_price: 'R$ 399', pl2_month: '/month', pl2_li1: '100k calls/month', pl2_li2: 'Webhooks + SLA', pl2_li3: 'Carbon‑aware routing', pl2_btn: 'Subscribe',
+      pl3_name: 'Enterprise', pl3_price: 'Custom', pl3_li1: 'Private data & contracts', pl3_li2: 'On‑prem / Multi‑cloud', pl3_li3: '24/7 support', pl3_btn: 'Talk to sales',
+      faq_kicker: 'FAQ', faq_title: 'Frequently asked questions',
+      q1: 'How do you estimate carbon?', a1: 'We combine energy metrics per cloud region + grid carbon intensity to estimate emissions per GB transferred and CPU/GPU‑s.',
+      q2: 'Can I bring my own bucket or data lake?', a2: 'Yes. We support BYO‑Storage (S3, GCS, ADLS) with async indexing and customer‑managed KMS keys.',
+      q3: 'Are there public samples?', a3: 'Yes, most collections include tiles and ready‑to‑run notebooks for you to try.',
+      q4: 'How does the Gold/Silver/Bronze rank work?', a4: 'We rank by metadata completeness, update reliability, coverage, and validated quality.',
+      cta_kicker: 'Ready for liftoff?', cta_title: 'Request beta access', cta_info_title: 'Your info', cta_pref_title: 'Preferences',
+      in_name: 'Name', in_email: 'Email', in_company: 'Company', in_primary: 'Primary use (e.g., monitor deforestation)', in_msg: 'Tell us about your use case',
+      pref_api: 'I want API first', pref_esg: 'ESG compliance', pref_premium: 'Premium data', cta_submit: 'Request access',
+      foot_tag: 'Connecting you to space with environmental responsibility.', foot_prod: 'Product', foot_comp: 'Company', foot_contact: 'Contact',
+      foot_explore: 'Explore', foot_plans: 'Plans', foot_faq: 'FAQ', foot_about: 'About', foot_careers: 'Careers', foot_press: 'Press', foot_cta: 'Request access',
+      toast_requested: 'Requested', toast_sample: '(sample)', toast_request_sent: 'Request sent! 🚀', toast_advanced_filters: 'Advanced filters (demo)'
+    },
+    pt: {
+      meta_title: 'OrbitHub • Marketplace de Dados de Satélites',
+      meta_desc: 'OrbitHub é o marketplace futurista de dados de satélites — descubra coleções, APIs e insights com pegada sustentável.',
+      nav_explore: 'Explorar', nav_solutions: 'Soluções', nav_pricing: 'Preços', nav_sustain: 'Sustentabilidade', nav_cta: 'Começar',
+      badge: '⚡ Beta Aberto • APIs e Amostras',
+      hero_title: '<span class="neon">Marketplace de Dados de Satélites</span> para um planeta mais inteligente e sustentável.',
+      hero_sub: 'Descubra coleções multi‑fonte, aplique filtros inteligentes e consuma via API. Transparência de impacto de carbono em cada requisição.',
+      search_ph: 'Buscar por satélite, missão, banda espectral…', search_title: 'Buscar', filter_title: 'Filtro rápido',
+      chip_carbon: '🌿 Carbon‑aware', chip_sats: '🛰️ 120+ satélites', chip_samples: '📦 Amostras incluídas',
+      sol_kicker: 'Por que OrbitHub?', sol_title: 'Filtros inteligentes, APIs unificadas e impacto mensurável.',
+      sol1_h: 'Descoberta Inteligente', sol1_p: 'Filtre por <strong>resolução</strong>, <strong>banda</strong>, <strong>cobertura</strong> e <strong>janela temporal</strong> com recomendações guiadas por IA.',
+      sol2_h: 'Consumo via API', sol2_p: 'SDKs prontos (Python/JS) e limites previsíveis. <em>Pay‑as‑you‑go</em> com cota mensal gratuita.',
+      sol3_h: 'Métrica de Carbono', sol3_p: 'Indicamos emissões estimadas por requisição, data center e região. Otimize <abbr id="abbr-sus" title="Sustentabilidade">SUS</abbr> sem perder performance.',
+      ds_kicker: 'Coleções em destaque', ds_title: 'Explore datasets prontos para teste',
+      s1_desc: 'Radar de abertura sintética • Res. 10 m • Órbita: LEO', l8_desc: 'Multiespectral • 15–100 m • Termal', s2_desc: '13 bandas • 10–60 m • Índices de vegetação', c1_desc: 'Brasil/China • 2 m pan • 8 m multiesp.',
+      sample_btn: 'Ver amostra',
+      how_kicker: 'Como funciona', how_title: 'Da busca ao insight em minutos',
+      st1_h: 'Escolha a coleção', st1_p: 'Use filtros por sensor, nuvem, resolução, faixa espectral e área.',
+      st2_h: 'Teste com amostras', st2_p: 'Baixe tiles ou visualize no navegador com camadas e índices.',
+      st3_h: 'Conecte a API', st3_p: 'Token, endpoint e <code>curl</code> gerados automaticamente.',
+      st4_h: 'Monitore o impacto', st4_p: 'Custos, latência e carbono estimado por requisição — em tempo real.',
+      sus_kicker: 'Compromisso', sus_title: 'Sustentabilidade embutida no design',
+      stat1_small: 'Offset anual', stat1_p: 't CO₂ compensadas',
+      stat2_small: 'Regiões verdes', stat2_p: 'data centers com energia renovável',
+      stat3_small: 'Requisições eco‑otimizadas', stat3_p: '% com roteamento carbon‑aware',
+      stat4_small: 'Projetos ODS', stat4_p: 'iniciativas alinhadas à ONU',
+      pricing_kicker: 'Planos', pricing_title: 'Preços simples e previsíveis',
+      pl1_name: 'Explorador', pl1_price: 'R$ 0', pl1_month: '/mês', pl1_li1: '1.000 chamadas/mês', pl1_li2: 'Amostras gratuitas', pl1_li3: 'Dashboard básico', pl1_btn: 'Começar grátis',
+      pl2_name: 'Profissional', pl2_price: 'R$ 399', pl2_month: '/mês', pl2_li1: '100k chamadas/mês', pl2_li2: 'Webhooks + SLA', pl2_li3: 'Roteamento carbon‑aware', pl2_btn: 'Assinar',
+      pl3_name: 'Enterprise', pl3_price: 'Custom', pl3_li1: 'Contratos e dados privados', pl3_li2: 'On‑prem / Multi‑cloud', pl3_li3: 'Suporte 24/7', pl3_btn: 'Fale com vendas',
+      faq_kicker: 'FAQ', faq_title: 'Perguntas frequentes',
+      q1: 'Como vocês estimam o carbono?', a1: 'Combinamos métricas de energia por região de nuvem + intensidade de carbono da rede para estimar emissões por GB transferido e CPU/GPU‑s.',
+      q2: 'Posso trazer meu próprio bucket ou data lake?', a2: 'Sim. Suportamos BYO‑Storage (S3, GCS, ADLS) com indexação assíncrona e chaves KMS do cliente.',
+      q3: 'Existem amostras públicas?', a3: 'Sim, a maioria das coleções possui tiles e notebooks prontos para você experimentar.',
+      q4: 'Como funciona o ranking Ouro/Prata/Bronze?', a4: 'Classificamos por completude de metadados, confiabilidade de atualização, cobertura e qualidade validada.',
+      cta_kicker: 'Pronto para decolar?', cta_title: 'Solicite acesso ao beta', cta_info_title: 'Seus dados', cta_pref_title: 'Preferências',
+      in_name: 'Nome', in_email: 'Email', in_company: 'Empresa', in_primary: 'Uso principal (ex.: monitorar desmatamento)', in_msg: 'Conte seu caso de uso',
+      pref_api: 'Quero API first', pref_esg: 'Compliance ESG', pref_premium: 'Dados premium', cta_submit: 'Solicitar acesso',
+      foot_tag: 'Conectando você ao espaço com responsabilidade ambiental.', foot_prod: 'Produto', foot_comp: 'Empresa', foot_contact: 'Contato',
+      foot_explore: 'Explorar', foot_plans: 'Planos', foot_faq: 'FAQ', foot_about: 'Sobre', foot_careers: 'Carreiras', foot_press: 'Imprensa', foot_cta: 'Solicitar acesso',
+      toast_requested: 'Solicitado', toast_sample: '(amostra)', toast_request_sent: 'Pedido enviado! 🚀', toast_advanced_filters: 'Filtros avançados (demo)'
+    }
+  };
+
+  function t(key){
+    const lang = document.documentElement.getAttribute('lang') || 'en';
+    const dict = I18N[lang === 'pt-BR' ? 'pt' : 'en'];
+    return dict[key] || key;
+  }
+
+  function setLang(lang){
+    const isPT = lang === 'pt';
+    document.documentElement.setAttribute('lang', isPT ? 'pt-BR' : 'en');
+    document.documentElement.setAttribute('data-lang', isPT ? 'pt' : 'en');
+
+    const d = I18N[isPT ? 'pt' : 'en'];
+    // meta
+    $('meta-title').textContent = d.meta_title;
+    $('meta-desc').setAttribute('content', d.meta_desc);
+
+    // nav
+    $('nav-explore').textContent = d.nav_explore;
+    $('nav-solutions').textContent = d.nav_solutions;
+    $('nav-pricing').textContent = d.nav_pricing;
+    $('nav-sustain').textContent = d.nav_sustain;
+    $('nav-cta').textContent = d.nav_cta;
+
+    // hero
+    $('badge-text').textContent = d.badge;
+    $('hero-title').innerHTML = d.hero_title;
+    $('hero-sub').textContent = d.hero_sub;
+    $('search-input').setAttribute('placeholder', d.search_ph);
+    $('search-btn').setAttribute('title', d.search_title);
+    $('filter-btn').setAttribute('title', d.filter_title);
+    $('chip-carbon').textContent = d.chip_carbon;
+    $('chip-sats').textContent = d.chip_sats;
+    $('chip-samples').textContent = d.chip_samples;
+
+    // solutions
+    $('sol-kicker').textContent = d.sol_kicker;
+    $('sol-title').textContent = d.sol_title;
+    $('sol1-h').textContent = d.sol1_h; $('sol1-p').innerHTML = d.sol1_p;
+    $('sol2-h').textContent = d.sol2_h; $('sol2-p').innerHTML = d.sol2_p;
+    $('sol3-h').textContent = d.sol3_h; $('sol3-p').innerHTML = d.sol3_p;
+
+    // datasets
+    $('ds-kicker').textContent = d.ds_kicker; $('ds-title').textContent = d.ds_title;
+    $('s1-desc').textContent = d.s1_desc; $('l8-desc').textContent = d.l8_desc; $('s2-desc').textContent = d.s2_desc; $('c1-desc').textContent = d.c1_desc;
+    $('s1-btn').textContent = d.sample_btn; $('l8-btn').textContent = d.sample_btn; $('s2-btn').textContent = d.sample_btn; $('c1-btn').textContent = d.sample_btn;
+
+    // how
+    $('how-kicker').textContent = d.how_kicker; $('how-title').textContent = d.how_title;
+    $('st1-h').textContent = d.st1_h; $('st1-p').textContent = d.st1_p;
+    $('st2-h').textContent = d.st2_h; $('st2-p').textContent = d.st2_p;
+    $('st3-h').textContent = d.st3_h; $('st3-p').innerHTML = d.st3_p;
+    $('st4-h').textContent = d.st4_h; $('st4-p').textContent = d.st4_p;
+
+    // sustainability
+    $('sus-kicker').textContent = d.sus_kicker; $('sus-title').textContent = d.sus_title;
+    $('stat1-small').textContent = d.stat1_small; $('stat1-p').textContent = d.stat1_p;
+    $('stat2-small').textContent = d.stat2_small; $('stat2-p').textContent = d.stat2_p;
+    $('stat3-small').textContent = d.stat3_small; $('stat3-p').textContent = d.stat3_p;
+    $('stat4-small').textContent = d.stat4_small; $('stat4-p').textContent = d.stat4_p;
+
+    // pricing
+    $('pricing-kicker').textContent = d.pricing_kicker; $('pricing-title').textContent = d.pricing_title;
+    $('pl1-name').textContent = d.pl1_name; $('pl1-price').textContent = d.pl1_price; $('pl1-month').textContent = d.pl1_month;
+    $('pl1-li1').textContent = d.pl1_li1; $('pl1-li2').textContent = d.pl1_li2; $('pl1-li3').textContent = d.pl1_li3; $('pl1-btn').textContent = d.pl1_btn;
+    $('pl2-name').textContent = d.pl2_name; $('pl2-price').textContent = d.pl2_price; $('pl2-month').textContent = d.pl2_month;
+    $('pl2-li1').textContent = d.pl2_li1; $('pl2-li2').textContent = d.pl2_li2; $('pl2-li3').textContent = d.pl2_li3; $('pl2-btn').textContent = d.pl2_btn;
+    $('pl3-name').textContent = d.pl3_name; $('pl3-price').textContent = d.pl3_price;
+    $('pl3-li1').textContent = d.pl3_li1; $('pl3-li2').textContent = d.pl3_li2; $('pl3-li3').textContent = d.pl3_li3; $('pl3-btn').textContent = d.pl3_btn;
+
+    // faq
+    $('faq-kicker').textContent = d.faq_kicker; $('faq-title').textContent = d.faq_title;
+    $('q1').textContent = d.q1; $('a1').textContent = stripHTML(d.a1);
+    $('q2').textContent = d.q2; $('a2').textContent = stripHTML(d.a2);
+    $('q3').textContent = d.q3; $('a3').textContent = stripHTML(d.a3);
+    $('q4').textContent = d.q4; $('a4').textContent = stripHTML(d.a4);
+
+    // cta
+    $('cta-kicker').textContent = d.cta_kicker; $('cta-title').textContent = d.cta_title;
+    $('cta-info-title').textContent = d.cta_info_title; $('cta-pref-title').textContent = d.cta_pref_title;
+    $('in-name').setAttribute('placeholder', d.in_name);
+    $('in-email').setAttribute('placeholder', d.in_email);
+    $('in-company').setAttribute('placeholder', d.in_company);
+    $('in-primary').setAttribute('placeholder', d.in_primary);
+    $('in-msg').setAttribute('placeholder', d.in_msg);
+    $('pref-api').textContent = d.pref_api; $('pref-esg').textContent = d.pref_esg; $('pref-premium').textContent = d.pref_premium;
+    $('cta-submit').textContent = d.cta_submit;
+
+    // footer
+    $('foot-tag').textContent = d.foot_tag; $('foot-prod').textContent = d.foot_prod; $('foot-comp').textContent = d.foot_comp; $('foot-contact').textContent = d.foot_contact;
+    $('foot-explore').textContent = d.foot_explore; $('foot-plans').textContent = d.foot_plans; $('foot-faq').textContent = d.foot_faq; $('foot-about').textContent = d.foot_about; $('foot-careers').textContent = d.foot_careers; $('foot-press').textContent = d.foot_press; $('foot-cta').textContent = d.foot_cta;
+
+    // lang buttons state
+    $('lang-en').classList.toggle('active', !isPT); $('lang-en').setAttribute('aria-pressed', String(!isPT));
+    $('lang-pt').classList.toggle('active', isPT);  $('lang-pt').setAttribute('aria-pressed', String(isPT));
+  }
+
+  function stripHTML(s){ const div=document.createElement('div'); div.innerHTML=s; return div.textContent || div.innerText || ''; }
+
+  // simple key->translated text for toasts
+  function tToast(key){ return t('toast.'+key); }
+
+  // convenience accessor
+  function t(k){
+    const lang = document.documentElement.getAttribute('lang') === 'pt-BR' ? 'pt' : 'en';
+    const dict = I18N[lang];
+    const flat = {
+      'toast.requested': dict.toast_requested,
+      'toast.sample': dict.toast_sample,
+      'toast.request_sent': dict.toast_request_sent,
+      'toast.advanced_filters': dict.toast_advanced_filters
+    };
+    return flat[k] || k;
+  }
+
+  // init lang switch
+  $('lang-en').addEventListener('click', ()=> setLang('en'));
+  $('lang-pt').addEventListener('click', ()=> setLang('pt'));
+
+  // initial (ensure EN default)
+  setLang('en');
   </script>
 </body>
 </html>
