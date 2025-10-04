@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OrbitHub • Marketplace de Dados de Satélites</title>
+  <meta name="description" content="OrbitHub é o marketplace futurista de dados de satélites — descubra coleções, APIs e insights com pegada sustentável." />
+  <meta name="theme-color" content="#0ff" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #070a0f;
+      --panel: rgba(255,255,255,0.06);
+      --panel-2: rgba(255,255,255,0.10);
+      --txt: #e6f6ff;
+      --muted: #9ab6c2;
+      --brand: #00fff0; /* cyan */
+      --brand-2: #8a2be2; /* electric purple */
+      --accent: #00d1ff; /* neon blue */
+      --good: #57ffa0;
+      --warn: #ffd057;
+      --bad: #ff6b88;
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0,255,240,0.08), inset 0 1px 0 rgba(255,255,255,0.05);
+      --grid-gap: clamp(16px, 2vw, 24px);
+    }
+    * {box-sizing: border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: 'Outfit', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, "Noto Sans", sans-serif;
+      color:var(--txt); background: radial-gradient(1200px 800px at 80% -20%, rgba(138,43,226,.25), transparent 60%), radial-gradient(1000px 600px at -20% 120%, rgba(0,255,240,.18), transparent 65%), var(--bg);
+      line-height:1.4; overflow-x:hidden;
+    }
+    /* Starfield canvas sits behind all */
+    .space{position:fixed; inset:0; z-index:-2; background:transparent}
+    /* Subtle grid overlay */
+    .grid-overlay{position:fixed; inset:0; z-index:-1; background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px); background-size: 80px 80px; mask-image: radial-gradient(circle at 50% 40%, rgba(0,0,0,.7), transparent 70%)}
+
+    a{color:var(--brand)}
+    .container{width:min(1180px, 92%); margin-inline:auto}
+
+    /* NAV */
+    nav{position:sticky; top:0; backdrop-filter: blur(8px); background: linear-gradient(180deg, rgba(7,10,15,.7), rgba(7,10,15,.35)); border-bottom:1px solid rgba(255,255,255,.08); z-index:50}
+    .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+    .logo{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.5px}
+    .logo .orb{width:28px; aspect-ratio:1; border-radius:50%; background: conic-gradient(from 200deg, var(--brand), var(--brand-2), var(--accent), var(--brand)); box-shadow: 0 0 20px rgba(0,255,240,.6)}
+    .nav-links{display:flex; gap:18px; align-items:center}
+    .nav-links a{padding:8px 12px; border-radius:12px; text-decoration:none; color:var(--txt); opacity:.9}
+    .nav-links a:hover{background:var(--panel)}
+    .cta{background: linear-gradient(135deg, var(--brand), var(--accent)); color:#001015; font-weight:700; box-shadow: 0 8px 24px rgba(0,255,240,.25);}
+
+    /* HERO */
+    .hero{display:grid; grid-template-columns: 1.2fr 1fr; gap:var(--grid-gap); align-items:center; padding: clamp(36px, 6vw, 72px) 0}
+    .badge{display:inline-flex; gap:10px; align-items:center; padding:6px 10px; border-radius:999px; background: var(--panel); border: 1px solid rgba(255,255,255,.08); font-size:12px; color:var(--muted)}
+    h1{font-size: clamp(36px, 6vw, 62px); line-height:1.05; margin:14px 0 10px; font-weight:800}
+    .neon{background: linear-gradient(90deg, #fff, var(--brand), #fff); background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation: shine 8s linear infinite}
+    @keyframes shine{0%{background-position:0 0}100%{background-position:200% 0}}
+    .sub{font-size: clamp(16px, 2.2vw, 20px); color:var(--muted)}
+
+    .searchbar{display:flex; gap:10px; margin-top:18px; background:var(--panel); border:1px solid rgba(255,255,255,.08); padding:10px; border-radius:16px; box-shadow: var(--shadow)}
+    .searchbar input{flex:1; background:transparent; color:var(--txt); border:none; outline:none; font-size:16px}
+    .searchbar button{border:none; padding:10px 14px; border-radius:12px; background:var(--panel-2); color:var(--txt); cursor:pointer}
+    .searchbar button:hover{background:rgba(255,255,255,.12)}
+
+    /* Futuristic globe */
+    .globe-wrap{position:relative; aspect-ratio:1; border-radius:50%; background: radial-gradient(60% 60% at 35% 35%, rgba(0,255,240,.25), transparent 60%), radial-gradient(circle at 60% 55%, rgba(138,43,226,.18), transparent 65%); border:1px solid rgba(255,255,255,.08); box-shadow: 0 20px 60px rgba(0,0,0,.45), inset 0 0 60px rgba(0,255,240,.14); overflow:hidden}
+    .globe-grid{position:absolute; inset:0; background-image: radial-gradient(circle at 50% 50%, transparent 46%, rgba(255,255,255,.08) 46.5%, transparent 47%), 
+      repeating-conic-gradient(from 0deg, rgba(255,255,255,.08) 0 0.5deg, transparent .5deg 9deg), repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,.08) 0 1px, transparent 1px 30px); filter: drop-shadow(0 0 10px rgba(0,255,240,.25))}
+    .globe-line{position:absolute; inset:-20% -20% auto -20%; height:2px; background: linear-gradient(90deg, transparent, var(--brand), transparent); transform: rotate(var(--r,0deg)); opacity:.55; animation: sweep 8s linear infinite}
+    .globe-line:nth-child(2){--r:30deg; animation-delay:-2s}
+    .globe-line:nth-child(3){--r:60deg; animation-delay:-4s}
+    .globe-line:nth-child(4){--r:90deg; animation-delay:-6s}
+    @keyframes sweep{0%{transform: rotate(var(--r)) translateY(0)} 100%{transform: rotate(var(--r)) translateY(360px)}}
+
+    /* Feature cards */
+    .section{padding: clamp(32px, 6vw, 72px) 0}
+    .kicker{color:var(--muted); letter-spacing:.12em; text-transform:uppercase; font-weight:600; font-size:12px}
+    .title{font-size: clamp(22px, 4vw, 34px); margin:8px 0 16px}
+    .cards{display:grid; grid-template-columns: repeat(12, 1fr); gap:var(--grid-gap)}
+    .card{grid-column: span 4; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); border:1px solid rgba(255,255,255,.08); border-radius: var(--radius); padding:18px; box-shadow: var(--shadow)}
+    .card h3{margin:0 0 4px}
+    .card p{margin:0; color:var(--muted)}
+    .chip{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background: rgba(0,255,240,.12); color: var(--brand)}
+
+    /* Dataset list */
+    .datasets{display:grid; grid-template-columns: repeat(12, 1fr); gap:var(--grid-gap)}
+    .dataset{grid-column: span 6; display:flex; gap:14px; background: var(--panel); border:1px solid rgba(255,255,255,.08); border-radius: var(--radius); padding:14px; align-items:center}
+    .dataset .icon{width:42px; height:42px; border-radius:12px; background: linear-gradient(135deg, var(--brand), var(--brand-2)); display:grid; place-items:center; color:#001015; font-weight:800; box-shadow: 0 8px 24px rgba(0,255,240,.18)}
+    .dataset small{color:var(--muted)}
+    .dataset a.btn{margin-left:auto}
+    .btn{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:12px; text-decoration:none; color:#001015; background: linear-gradient(135deg, var(--brand), var(--accent)); font-weight:700; box-shadow: 0 8px 24px rgba(0,255,240,.22)}
+
+    /* Sustainability stats */
+    .stats{display:grid; grid-template-columns: repeat(12, 1fr); gap:var(--grid-gap)}
+    .stat{grid-column: span 3; background: var(--panel); border:1px solid rgba(255,255,255,.08); border-radius: var(--radius); padding:18px; text-align:center}
+    .stat h2{font-size: clamp(28px, 4vw, 40px); margin:8px 0}
+    .stat p{margin:4px 0 0; color:var(--muted)}
+
+    /* Steps */
+    .steps{display:grid; grid-template-columns: repeat(12, 1fr); gap:var(--grid-gap)}
+    .step{grid-column: span 3; background: linear-gradient(180deg, rgba(0,209,255,.16), rgba(255,255,255,.02)); border:1px solid rgba(0,209,255,.25); border-radius: var(--radius); padding:18px}
+    .step .num{font-weight:800; color:var(--accent); font-size:14px; letter-spacing:.08em}
+
+    /* Pricing teaser */
+    .pricing{display:grid; grid-template-columns: repeat(12, 1fr); gap:var(--grid-gap)}
+    .plan{grid-column: span 4; background: var(--panel); border:1px solid rgba(255,255,255,.08); border-radius: var(--radius); padding:20px}
+    .price{font-size:34px; font-weight:800}
+    .plan ul{margin:12px 0 0; padding:0 0 0 18px; color:var(--muted)}
+
+    /* FAQ */
+    details{background: var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:12px 14px}
+    summary{cursor:pointer; font-weight:600}
+    .faq{display:grid; grid-template-columns: repeat(12, 1fr); gap:var(--grid-gap)}
+    .faq details{grid-column: span 6}
+
+    /* Footer */
+    footer{border-top:1px solid rgba(255,255,255,.08); padding:24px 0 60px; color:var(--muted)}
+    .foot-grid{display:grid; grid-template-columns: repeat(12, 1fr); gap:var(--grid-gap)}
+    .foot-col{grid-column: span 3}
+    .foot-col a{display:block; text-decoration:none; color:var(--muted); padding:6px 0}
+    .copyright{margin-top:16px; text-align:center; opacity:.7}
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero{grid-template-columns: 1fr;}
+      .cards .card, .datasets .dataset, .steps .step, .stats .stat, .pricing .plan, .faq details, .foot-col{grid-column: span 12}
+      .nav-links{display:none}
+    }
+  </style>
+</head>
+<body>
+  <canvas id="space" class="space" aria-hidden="true"></canvas>
+  <div class="grid-overlay" aria-hidden="true"></div>
+
+  <nav aria-label="Principal">
+    <div class="container nav-inner">
+      <div class="logo" aria-label="OrbitHub">
+        <span class="orb" aria-hidden="true"></span>
+        <span>OrbitHub</span>
+      </div>
+      <div class="nav-links">
+        <a href="#datasets">Explorar</a>
+        <a href="#solucoes">Soluções</a>
+        <a href="#precos">Preços</a>
+        <a href="#sustentabilidade">Sustentabilidade</a>
+        <a class="cta" href="#comece">Começar</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="container hero" id="topo">
+    <div>
+      <span class="badge">⚡ Beta Aberto • APIs & Amostras</span>
+      <h1><span class="neon">Marketplace de Dados de Satélites</span> para um planeta mais inteligente e sustentável.</h1>
+      <p class="sub">Descubra coleções multi‑fonte, aplique filtros inteligentes e consuma via API. Transparência de impacto climático em cada requisição.</p>
+
+      <form class="searchbar" role="search" aria-label="Buscar datasets" onsubmit="event.preventDefault(); document.querySelector('#datasets').scrollIntoView({behavior:'smooth'});">
+        <input placeholder="Buscar por satélite, missão, banda espectral…" aria-label="Buscar" />
+        <button type="submit" title="Buscar">🔎</button>
+        <button type="button" title="Filtro rápido" onclick="toggleFilters()">⛭</button>
+      </form>
+      <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap">
+        <span class="chip">🌿 Carbon‑aware</span>
+        <span class="chip" style="background: rgba(138,43,226,.14); color:#c9a7ff">🛰️ 120+ satélites</span>
+        <span class="chip" style="background: rgba(0,209,255,.14); color:#9be8ff">📦 Amostras incluídas</span>
+      </div>
+    </div>
+    <div aria-hidden="true" class="globe-wrap">
+      <div class="globe-grid"></div>
+      <div class="globe-line"></div>
+      <div class="globe-line"></div>
+      <div class="globe-line"></div>
+      <div class="globe-line"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="container section" id="solucoes">
+      <div class="kicker">Por que OrbitHub?</div>
+      <h2 class="title">Filtros inteligentes, APIs unificadas e impacto mensurável.</h2>
+      <div class="cards">
+        <article class="card" aria-label="Descoberta">
+          <h3>Descoberta Inteligente</h3>
+          <p>Filtre por <strong>resolução</strong>, <strong>banda</strong>, <strong>cobertura</strong> e <strong>janela temporal</strong> com recomendações guiadas por IA.</p>
+        </article>
+        <article class="card" aria-label="Consumo">
+          <h3>Consumo via API</h3>
+          <p>SDKs prontos (Python/JS) e limites previsíveis. <em>Pay‑as‑you‑go</em> com cota livre mensal.</p>
+        </article>
+        <article class="card" aria-label="Sustentabilidade">
+          <h3>Métrica de Carbono</h3>
+          <p>Indicamos emissão estimada por consulta, data center e região. Otimize <abbr title="Sustentabilidade">SUS</abbr> sem perder performance.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container section" id="datasets">
+      <div class="kicker">Coleções em destaque</div>
+      <h2 class="title">Explore datasets prontos para teste</h2>
+      <div class="datasets" role="list">
+        <div class="dataset" role="listitem">
+          <div class="icon">S1</div>
+          <div>
+            <strong>Sentinel‑1 SAR</strong>
+            <div><small>Radar de abertura sintética • Res. 10m • Órbita: LEO</small></div>
+          </div>
+          <a class="btn" href="#" onclick="demoToast('Solicitado: Sentinel-1 (amostra)')">Ver amostra</a>
+        </div>
+        <div class="dataset" role="listitem">
+          <div class="icon">L8</div>
+          <div>
+            <strong>Landsat‑8 OLI/TIRS</strong>
+            <div><small>Multiespectral • 15–100m • Termal</small></div>
+          </div>
+          <a class="btn" href="#" onclick="demoToast('Solicitado: Landsat-8 (amostra)')">Ver amostra</a>
+        </div>
+        <div class="dataset" role="listitem">
+          <div class="icon">S2</div>
+          <div>
+            <strong>Sentinel‑2 MSI</strong>
+            <div><small>13 bandas • 10–60m • Índices de vegetação</small></div>
+          </div>
+          <a class="btn" href="#" onclick="demoToast('Solicitado: Sentinel-2 (amostra)')">Ver amostra</a>
+        </div>
+        <div class="dataset" role="listitem">
+          <div class="icon">C1</div>
+          <div>
+            <strong>CBERS‑4A WPM</strong>
+            <div><small>Brasil/China • 2m pancrom. • 8m multiesp.</small></div>
+          </div>
+          <a class="btn" href="#" onclick="demoToast('Solicitado: CBERS-4A (amostra)')">Ver amostra</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section" id="como">
+      <div class="kicker">Como funciona</div>
+      <h2 class="title">Da busca ao insight em minutos</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="num">01</div>
+          <h3>Escolha a coleção</h3>
+          <p>Use filtros por sensor, nuvem, resolução, faixa espectral e área.</p>
+        </div>
+        <div class="step">
+          <div class="num">02</div>
+          <h3>Teste com amostras</h3>
+          <p>Baixe tiles ou visualize no navegador com camadas e índices.</p>
+        </div>
+        <div class="step">
+          <div class="num">03</div>
+          <h3>Conecte a API</h3>
+          <p>Token, endpoint e <code>curl</code> gerados automaticamente.</p>
+        </div>
+        <div class="step">
+          <div class="num">04</div>
+          <h3>Monitore o impacto</h3>
+          <p>Custos, latência e carbono estimado por consulta — em tempo real.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section" id="sustentabilidade">
+      <div class="kicker">Compromisso</div>
+      <h2 class="title">Sustentabilidade embutida no design</h2>
+      <div class="stats">
+        <div class="stat"><small>Offset anual</small><h2 data-count="120">0</h2><p>t CO₂ compensadas</p></div>
+        <div class="stat"><small>Regiões verdes</small><h2 data-count="9">0</h2><p>data centers com energia renovável</p></div>
+        <div class="stat"><small>Requisições eco‑otimizadas</small><h2 data-count="87">0</h2><p>% com roteamento carbon‑aware</p></div>
+        <div class="stat"><small>Projetos SDG</small><h2 data-count="32">0</h2><p>iniciativas alinhadas à ONU</p></div>
+      </div>
+    </section>
+
+    <section class="container section" id="precos">
+      <div class="kicker">Planos</div>
+      <h2 class="title">Preços simples e previsíveis</h2>
+      <div class="pricing">
+        <div class="plan">
+          <h3>Explorador</h3>
+          <div class="price">R$ 0</div>
+          <small>/mês</small>
+          <ul>
+            <li>1.000 chamadas/mês</li>
+            <li>Amostras gratuitas</li>
+            <li>Dashboard básico</li>
+          </ul>
+          <p><a class="btn" href="#comece">Começar grátis</a></p>
+        </div>
+        <div class="plan" style="border-color: rgba(0,255,240,.35)">
+          <h3>Profissional</h3>
+          <div class="price">R$ 399</div>
+          <small>/mês</small>
+          <ul>
+            <li>100k chamadas/mês</li>
+            <li>Webhooks + SLA</li>
+            <li>Roteamento eco‑aware</li>
+          </ul>
+          <p><a class="btn" href="#comece">Assinar</a></p>
+        </div>
+        <div class="plan">
+          <h3>Enterprise</h3>
+          <div class="price">Custom</div>
+          <ul>
+            <li>Contratos e dados privados</li>
+            <li>On‑prem / Multi‑cloud</li>
+            <li>Suporte 24/7</li>
+          </ul>
+          <p><a class="btn" href="#comece">Fale com vendas</a></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section" id="faq">
+      <div class="kicker">Dúvidas</div>
+      <h2 class="title">Perguntas frequentes</h2>
+      <div class="faq">
+        <details>
+          <summary>Como vocês calculam a estimativa de carbono?</summary>
+          <p>Combinamos métricas de energia por região do provedor + intensidade de carbono da grade elétrica para estimar emissões por GB transferido e CPU/GPU‑s.</p>
+        </details>
+        <details>
+          <summary>Posso trazer meu próprio bucket ou data lake?</summary>
+          <p>Sim. Suportamos BYO‑Storage (S3, GCS, ADLS) com indexação assíncrona e chaves KMS do cliente.</p>
+        </details>
+        <details>
+          <summary>Há amostras públicas para testes?</summary>
+          <p>Sim, a maioria das coleções possui tiles e <em>notebooks</em> prontos para você experimentar.</p>
+        </details>
+        <details>
+          <summary>Como funciona o ranque Ouro/Prata/Bronze?</summary>
+          <p>Classificamos por completude de metadados, confiabilidade de atualização, cobertura e qualidade validada.</p>
+        </details>
+      </div>
+    </section>
+
+    <section class="container section" id="comece">
+      <div class="kicker">Pronto para decolar?</div>
+      <h2 class="title">Solicite acesso ao beta</h2>
+      <form class="cards" onsubmit="event.preventDefault(); demoToast('Pedido enviado! 🚀'); this.reset();">
+        <div class="card" style="grid-column: span 8">
+          <h3>Seus dados</h3>
+          <div class="row" style="display:grid; grid-template-columns: repeat(12,1fr); gap:12px">
+            <input aria-label="Nome" style="grid-column: span 6" placeholder="Nome" required />
+            <input aria-label="Email" style="grid-column: span 6" placeholder="Email" type="email" required />
+            <input aria-label="Empresa" style="grid-column: span 6" placeholder="Empresa" />
+            <input aria-label="Uso principal" style="grid-column: span 6" placeholder="Uso principal (ex: monitorar desmatamento)" />
+            <textarea aria-label="Mensagem" style="grid-column: span 12; min-height:100px" placeholder="Conte seu caso de uso"></textarea>
+          </div>
+        </div>
+        <div class="card" style="grid-column: span 4; display:flex; flex-direction:column; gap:12px; justify-content:space-between">
+          <div>
+            <h3>Preferências</h3>
+            <label style="display:flex; gap:10px; align-items:center"><input type="checkbox" checked/> Quero API first</label>
+            <label style="display:flex; gap:10px; align-items:center"><input type="checkbox"/> Compliance ESG</label>
+            <label style="display:flex; gap:10px; align-items:center"><input type="checkbox"/> Dados premium</label>
+          </div>
+          <button class="btn" type="submit">Solicitar acesso</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot-grid">
+      <div class="foot-col">
+        <div class="logo" style="opacity:.9"><span class="orb"></span><span>OrbitHub</span></div>
+        <p style="margin-top:8px">Conectando você ao espaço com responsabilidade ambiental.</p>
+      </div>
+      <div class="foot-col">
+        <strong>Produto</strong>
+        <a href="#datasets">Explorar</a>
+        <a href="#precos">Planos</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="foot-col">
+        <strong>Empresa</strong>
+        <a href="#">Sobre</a>
+        <a href="#">Carreiras</a>
+        <a href="#">Imprensa</a>
+      </div>
+      <div class="foot-col">
+        <strong>Contato</strong>
+        <a href="#comece">Solicitar acesso</a>
+        <a href="mailto:hello@orbithub.space">hello@orbithub.space</a>
+      </div>
+    </div>
+    <div class="container copyright">© <span id="year"></span> OrbitHub. Todos os direitos reservados.</div>
+  </footer>
+
+  <!-- Toast -->
+  <div id="toast" role="status" aria-live="polite" style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(120%); background: rgba(0,0,0,.7); border:1px solid rgba(255,255,255,.12); color:#eafffb; padding:12px 16px; border-radius:12px; box-shadow: 0 10px 30px rgba(0,0,0,.4); transition:.4s; z-index:99">ok</div>
+
+  <script>
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Tiny toast helper
+  function demoToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(window.__toast); window.__toast = setTimeout(()=> t.style.transform = 'translateX(-50%) translateY(120%)', 2400);
+  }
+
+  // Show/hide fake filters action (demo only)
+  function toggleFilters(){
+    demoToast('Filtros avançados (demo)');
+  }
+
+  // Starfield background
+  const cvs = document.getElementById('space');
+  const ctx = cvs.getContext('2d');
+  let stars = [], w, h;
+  function resize(){w = cvs.width = window.innerWidth; h = cvs.height = window.innerHeight}
+  window.addEventListener('resize', resize); resize();
+  function spawn(){
+    stars = Array.from({length: 160}, () => ({
+      x: Math.random()*w,
+      y: Math.random()*h,
+      z: Math.random()*2 + .2,
+      a: Math.random()*.6 + .2
+    }));
+  }
+  spawn();
+  function loop(){
+    ctx.clearRect(0,0,w,h);
+    for(const s of stars){
+      s.x += s.z; if(s.x>w) s.x=0;
+      ctx.globalAlpha = s.a; ctx.fillStyle = '#9be8ff';
+      ctx.fillRect(s.x, s.y, 2, 2);
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  // Count‑up stats on visibility
+  const counters = document.querySelectorAll('[data-count]');
+  const io = new IntersectionObserver(entries => {
+    for(const e of entries){
+      if(e.isIntersecting){
+        const el = e.target; const target = +el.dataset.count; let v = 0; const step = Math.max(1, Math.floor(target/60));
+        const tick = ()=>{ v += step; if(v>=target){v=target; clearInterval(id);} el.textContent = v; };
+        const id = setInterval(tick, 20); io.unobserve(el);
+      }
+    }
+  }, {threshold:.3});
+  counters.forEach(c => io.observe(c));
+
+  // Shrink nav on scroll
+  const nav = document.querySelector('nav .nav-inner');
+  let last=0; window.addEventListener('scroll', ()=>{
+    const y = window.scrollY; nav.style.padding = y>50? '8px 0' : '14px 0'; last=y;
+  });
+  </script>
+</body>
+</html>
