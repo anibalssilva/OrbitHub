@@ -127,6 +127,14 @@
     .foot-col a{display:block; text-decoration:none; color:var(--muted); padding:6px 0}
     .copyright{margin-top:16px; text-align:center; opacity:.7}
 
+    /* Popup (modal) to guide user to portal */
+    .modal-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.88); display:none; align-items:center; justify-content:center; z-index:1000}
+    .modal-backdrop[data-visible="true"]{display:flex}
+    .modal{background: #0b1118; border:1px solid rgba(255,255,255,.18); border-radius: var(--radius); padding:20px; max-width:560px; width:min(560px,92%); box-shadow: var(--shadow); color:var(--txt)}
+    .modal h3{margin:0 0 8px}
+    .modal p{margin:0 0 14px; color:var(--txt); opacity:.9}
+    .modal-actions{display:flex; justify-content:flex-end; gap:8px}
+
     /* Responsive */
     @media (max-width: 980px){
       .hero{grid-template-columns: 1fr;}
@@ -184,6 +192,17 @@
       <div class="globe-line"></div>
     </div>
   </header>
+
+  <!-- Onboarding Popup -->
+  <div id="onboard" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="onboard-title" aria-hidden="true">
+    <div class="modal">
+      <h3 id="onboard-title">Open Request Portal</h3>
+      <p id="onboard-text">To submit your data request, click the <strong>Open Request Portal</strong> button.</p>
+      <div class="modal-actions">
+        <button id="onboard-close" class="lang" type="button">OK</button>
+      </div>
+    </div>
+  </div>
 
   <main>
     <section class="container section" id="solucoes">
@@ -656,6 +675,29 @@
   // init lang switch
   $('lang-en').addEventListener('click', ()=> setLang('en'));
   $('lang-pt').addEventListener('click', ()=> setLang('pt'));
+
+  // Onboarding popup: show once per session
+  const onboard = document.getElementById('onboard');
+  const closeOnboard = ()=>{ onboard.setAttribute('aria-hidden','true'); onboard.removeAttribute('data-visible'); sessionStorage.setItem('onboard_shown','1'); };
+  document.getElementById('onboard-close').addEventListener('click', closeOnboard);
+  document.getElementById('onboard').addEventListener('click', (e)=>{ if(e.target.id==='onboard') closeOnboard(); });
+  // translate popup with current lang
+  function syncOnboardText(){
+    const d = I18N[document.documentElement.getAttribute('data-lang')==='pt'?'pt':'en'];
+    document.getElementById('onboard-title').textContent = d.nav_portal;
+    document.getElementById('onboard-text').innerHTML = (d===I18N.en)
+      ? "To submit your data request, click the <strong>Open Request Portal</strong> button."
+      : "Para enviar sua requisição de dados, clique no botão <strong>Abrir Portal de Requisições</strong>.";
+  }
+  syncOnboardText();
+  // re-sync when language changes
+  const _setLangOrig = setLang; // keep reference if redefined (not here)
+  const _origSetLang = setLang;
+  setLang = function(lang){ _origSetLang(lang); syncOnboardText(); };
+
+  if(!sessionStorage.getItem('onboard_shown')){
+    onboard.setAttribute('data-visible','true'); onboard.setAttribute('aria-hidden','false');
+  }
 
   // initial (ensure EN default)
   setLang('en');
