@@ -18,6 +18,7 @@ import json
 import pandas as pd
 from joblib import load
 from .data_access import filter_satellites, persist_portal_request
+from fastapi.responses import RedirectResponse, JSONResponse
 
 # Initialize FastAPI application / Inicializa aplicação FastAPI
 app = FastAPI(title="Sustentabilidade de Satélites")
@@ -85,13 +86,22 @@ def map_cluster_to_label(cluster: int) -> str:
     return mapping.get(int(cluster), "BRONZE")
 
 
-@app.get("/health")
+# @app.get("/health")
+# def health():
+#     """
+#     Health check endpoint.
+#     Endpoint de verificação de saúde.
+#     """
+#     return {"status": "ok"}
+
+@app.get("/", include_in_schema=False, tags=["meta"])
+def root():
+    # Se preferir, troque por: return {"service": "orbithub-backend", "status": "ok"}
+    return RedirectResponse(url="/docs")
+
+@app.get("/health", include_in_schema=False, tags=["meta"])
 def health():
-    """
-    Health check endpoint.
-    Endpoint de verificação de saúde.
-    """
-    return {"status": "ok"}
+    return JSONResponse({"status": "ok"})
 
 
 @app.post("/classify")
