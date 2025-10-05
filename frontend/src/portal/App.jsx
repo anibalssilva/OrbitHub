@@ -260,7 +260,7 @@ export default function App(){
               <button className={`lang ${lang==='pt'?'active':''}`} aria-pressed={lang==='pt'} onClick={()=>{document.documentElement.lang='pt-BR';setLang('pt')}}>PT</button>
             </div>
             <a className="btn-ghost" href="/">{t.home}</a>
-            <a className="cta" href="#request">{t.nav_cta}</a>
+            <a className="cta" href="#request" style={{color:'#000'}}>{t.nav_cta}</a>
           </div>
         </div>
       </nav>

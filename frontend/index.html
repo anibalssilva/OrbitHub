@@ -152,8 +152,8 @@
           <button id="lang-en" class="lang active" aria-pressed="true">EN</button>
           <button id="lang-pt" class="lang" aria-pressed="false">PT</button>
         </div>
-        <a id="nav-portal" class="btn" href="/portal.html" style="margin-right:8px">Open Request Portal</a>
-        <a id="nav-cta" class="cta" href="#comece">Get Started</a>
+        <a id="nav-portal" class="btn" href="/portal.html" style="margin-right:8px; color:#000;">Open Request Portal</a>
+        <a id="nav-cta" class="cta" href="#comece" style="color:#000;">Get Started</a>
       </div>
     </div>
   </nav>
@@ -199,7 +199,7 @@
         </article>
         <article class="card" aria-label="Sustainability">
           <h3 id="sol3-h">Carbon Metric</h3>
-          <p id="sol3-p">We show estimated emissions by request, data center, and region. Optimize <abbr id="abbr-sus" title="Sustainability">SUS</abbr> without sacrificing performance.</p>
+          <p id="sol3-p">We show estimated emissions by request, data center, and region. Optimize <abbr id="abbr-sus" title="Sustainability">Sustainability</abbr> without sacrificing performance.</p>
         </article>
       </div>
     </section>
@@ -348,7 +348,7 @@
       <h2 id="cta-title" class="title">Request beta access</h2>
       <div class="cards">
         <div class="card" style="grid-column: span 12; text-align:center">
-          <a id="portal-button" class="btn" href="/portal.html">Open Request Portal</a>
+          <a id="portal-button" class="btn" href="/portal.html" style="color:#000;">Open Request Portal</a>
         </div>
       </div>
     </section>
@@ -450,7 +450,7 @@
     en: {
       meta_title: 'OrbitHub • Satellite Data Marketplace',
       meta_desc: 'OrbitHub is the futuristic marketplace for satellite data — discover collections, APIs, and insights with a sustainable edge.',
-      nav_explore: 'Explore', nav_solutions: 'Solutions', nav_pricing: 'Pricing', nav_sustain: 'Sustainability', nav_cta: 'Get Started',
+      nav_explore: 'Explore', nav_solutions: 'Solutions', nav_pricing: 'Pricing', nav_sustain: 'Sustainability', nav_portal: 'Open Request Portal', nav_cta: 'Get Started',
       badge: '⚡ Open Beta • APIs & Samples',
       hero_title: '<span class="neon">Satellite Data Marketplace</span> for a smarter, more sustainable planet.',
       hero_sub: 'Discover multi‑source collections, apply smart filters, and consume via API. Carbon impact transparency in every request.',
@@ -492,7 +492,7 @@
     pt: {
       meta_title: 'OrbitHub • Marketplace de Dados de Satélites',
       meta_desc: 'OrbitHub é o marketplace futurista de dados de satélites — descubra coleções, APIs e insights com pegada sustentável.',
-      nav_explore: 'Explorar', nav_solutions: 'Soluções', nav_pricing: 'Preços', nav_sustain: 'Sustentabilidade', nav_cta: 'Começar',
+      nav_explore: 'Explorar', nav_solutions: 'Soluções', nav_pricing: 'Preços', nav_sustain: 'Sustentabilidade', nav_portal: 'Abrir Portal de Requisições', nav_cta: 'Começar',
       badge: '⚡ Beta Aberto • APIs e Amostras',
       hero_title: '<span class="neon">Marketplace de Dados de Satélites</span> para um planeta mais inteligente e sustentável.',
       hero_sub: 'Descubra coleções multi‑fonte, aplique filtros inteligentes e consuma via API. Transparência de impacto de carbono em cada requisição.',
@@ -501,7 +501,7 @@
       sol_kicker: 'Por que OrbitHub?', sol_title: 'Filtros inteligentes, APIs unificadas e impacto mensurável.',
       sol1_h: 'Descoberta Inteligente', sol1_p: 'Filtre por <strong>resolução</strong>, <strong>banda</strong>, <strong>cobertura</strong> e <strong>janela temporal</strong> com recomendações guiadas por IA.',
       sol2_h: 'Consumo via API', sol2_p: 'SDKs prontos (Python/JS) e limites previsíveis. <em>Pay‑as‑you‑go</em> com cota mensal gratuita.',
-      sol3_h: 'Métrica de Carbono', sol3_p: 'Indicamos emissões estimadas por requisição, data center e região. Otimize <abbr id="abbr-sus" title="Sustentabilidade">SUS</abbr> sem perder performance.',
+      sol3_h: 'Métrica de Carbono', sol3_p: 'Indicamos emissões estimadas por requisição, data center e região. Otimize <abbr id="abbr-sus" title="Sustentabilidade">Sustentabilidade</abbr> sem perder performance.',
       ds_kicker: 'Coleções em destaque', ds_title: 'Explore datasets prontos para teste',
       s1_desc: 'Radar de abertura sintética • Res. 10 m • Órbita: LEO', l8_desc: 'Multiespectral • 15–100 m • Termal', s2_desc: '13 bandas • 10–60 m • Índices de vegetação', c1_desc: 'Brasil/China • 2 m pan • 8 m multiesp.',
       sample_btn: 'Ver amostra',
@@ -554,6 +554,7 @@
     $('nav-solutions').textContent = d.nav_solutions;
     $('nav-pricing').textContent = d.nav_pricing;
     $('nav-sustain').textContent = d.nav_sustain;
+    $('nav-portal').textContent = d.nav_portal;
     $('nav-cta').textContent = d.nav_cta;
 
     // hero
@@ -611,6 +612,7 @@
 
     // cta
     $('cta-kicker').textContent = d.cta_kicker; $('cta-title').textContent = d.cta_title;
+    $('portal-button').textContent = d.nav_portal;
     $('cta-info-title').textContent = d.cta_info_title; $('cta-pref-title').textContent = d.cta_pref_title;
     $('in-name').setAttribute('placeholder', d.in_name);
     $('in-email').setAttribute('placeholder', d.in_email);
