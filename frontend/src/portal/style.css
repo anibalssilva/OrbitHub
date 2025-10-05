@@ -8,7 +8,11 @@ body{margin:0;font-family:'Outfit',system-ui,-apple-system,Segoe UI,Roboto,Ubunt
 nav{position:sticky;top:0;backdrop-filter:blur(8px);background:linear-gradient(180deg, rgba(7,10,15,.7), rgba(7,10,15,.35));border-bottom:1px solid rgba(255,255,255,.08);z-index:50}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
 .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
-.logo .orb{width:28px;aspect-ratio:1;border-radius:50%;background:conic-gradient(from 200deg, var(--brand), var(--brand-2), var(--accent), var(--brand));box-shadow:0 0 20px rgba(0,255,240,.6)}
+/* .logo .orb{display:none} */ */
+
+.logo{line-height:0}
+.logo-img{width:120px;height:auto;display:block;object-fit:contain}
+.nav-inner{padding:22px 0}
 .nav-links{display:flex;gap:18px;align-items:center}
 .nav-links a{padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--txt);opacity:.9}
 .nav-links a:hover{background:var(--panel)}

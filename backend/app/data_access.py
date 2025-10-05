@@ -129,6 +129,12 @@ def filter_satellites(
     Returns:
         List of satellite records with detailed information
     """
+    # Special branch: Pending classification → list from Celestrak CSV
+    # Ramo especial: Pendente de classificação → lista do CSV Celestrak
+    norm_class = (classification or "").strip().upper()
+    if norm_class in {"PENDENTE", "PENDENTE DE CLASSIFICAÇÃO", "PENDING", "PENDING CLASSIFICATION"}:
+        return _list_pending_from_celestrak(limit=limit)
+
     # Get all classified satellites / Obtém todos os satélites classificados
     df = get_classified_satellites()
 
@@ -179,6 +185,45 @@ def filter_satellites(
     # Apply limit if specified / Aplica limite se especificado
     if limit and limit > 0:
         records = records[:limit]
+
+    return records
+
+
+def _list_pending_from_celestrak(limit: int = 50) -> List[dict]:
+    """
+    Load a lightweight list of satellites from Celestrak CSV for the
+    "Pending Classification" category. Missing fields are returned as "--".
+
+    Carrega uma lista leve de satélites do CSV Celestrak para a categoria
+    "Pendente de Classificação". Campos ausentes retornam "--".
+    """
+    # CSV path relative to project root when running from backend/
+    csv_path = os.path.join("..", "data", "raw", "Celestrak_data.csv")
+    try:
+        # The sample file appears to be semicolon-delimited
+        df = pd.read_csv(csv_path, sep=";", engine="python")
+    except Exception:
+        # Fallback: try comma
+        df = pd.read_csv(csv_path)
+
+    # Ensure we only take up to limit rows
+    if limit and limit > 0:
+        df = df.head(limit)
+
+    records: List[dict] = []
+    for _, row in df.iterrows():
+        name = row.get("name")
+        rec = {
+            "name_of_satellite": str(name) if pd.notna(name) else "--",
+            "alternate_names": "--",
+            "country_un_registry": "--",
+            "country_operator_owner": "--",
+            "operator_owner": "--",
+            "purpose": "--",
+            "detailed_purpose": "--",
+            "sustainability_class": "PENDENTE DE CLASSIFICAÇÃO",
+        }
+        records.append(rec)
 
     return records
 

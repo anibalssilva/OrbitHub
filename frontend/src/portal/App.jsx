@@ -44,9 +44,10 @@ const I18N = {
     badge: '⚡ Open Beta • APIs & Samples',
     hero_title: '<span class="neon">Satellite Data Request Portal</span><br/>for a smarter, more sustainable planet.',
     hero_sub: 'Submit your request and instantly browse satellites ranked by sustainability.',
-    chip_carbon: '🌿 Carbon‑aware', chip_sats: '🛰️ 120+ satellites', chip_samples: '📦 Samples included',
+    chip_carbon: '🌿 Carbon‑aware', chip_sats: '🛰️ 1200+ satellites', chip_samples: '📦 Samples included',
     // request section
     portal_kicker: 'Client request', portal_title: 'Submit your data request',
+    portal_instructions: 'To make your request: Fill in the data below. Select an Ecological Classification. Define a Delivery method. Filter the Satellites.',
     client_title: 'Client Information', name: 'Name', cnpj: 'Company ID', address: 'Address',
     email: 'Email', email_hint: 'Primary contact email for this request.',
     sector: 'Business sector', sector_hint: 'Requester industry or activity.',
@@ -100,8 +101,9 @@ const I18N = {
     badge: '⚡ Beta Aberto • APIs e Amostras',
     hero_title: '<span class="neon">Portal de Solicitação de Dados</span><br/>para um planeta mais inteligente e sustentável.',
     hero_sub: 'Envie sua solicitação e navegue por satélites ranqueados por sustentabilidade.',
-    chip_carbon: '🌿 Carbon‑aware', chip_sats: '🛰️ 120+ satélites', chip_samples: '📦 Amostras incluídas',
+    chip_carbon: '🌿 Carbon‑aware', chip_sats: '🛰️ 1200+ satélites', chip_samples: '📦 Amostras incluídas',
     portal_kicker: 'Solicitação do cliente', portal_title: 'Envie sua solicitação de dados',
+    portal_instructions: 'Para fazer a sua Requisição: Preencha os dados abaixo. Selecione uma Classificação Ecológica. Defina uma forma de Entrega. Filtre os Satélites.',
     client_title: 'Dados do Cliente', name: 'Nome', cnpj: 'CNPJ', address: 'Endereço',
     email: 'Email', email_hint: 'Email de contato principal desta solicitação.',
     sector: 'Ramo de atividade', sector_hint: 'Setor/atividade do solicitante.',
@@ -120,7 +122,10 @@ const I18N = {
 
 function classBadge(label, lang='en'){
   const L = (label||'').toUpperCase()
-  const cls = L==='OURO' || L==='GOLD' ? 'gold' : (L==='PRATA' || L==='SILVER' ? 'silver' : 'bronze')
+  const isPending = (L==='PENDENTE DE CLASSIFICAÇÃO' || L==='PENDING' || L==='PENDING CLASSIFICATION')
+  const cls = isPending
+    ? 'silver'
+    : (L==='OURO' || L==='GOLD' ? 'gold' : (L==='PRATA' || L==='SILVER' ? 'silver' : 'bronze'))
   
   // Translate the label based on the selected language
   let displayLabel = L
@@ -128,16 +133,20 @@ function classBadge(label, lang='en'){
     if (L === 'GOLD') displayLabel = 'OURO'
     else if (L === 'SILVER') displayLabel = 'PRATA'
     else if (L === 'BRONZE') displayLabel = 'BRONZE'
+    else if (L === 'PENDING' || L === 'PENDING CLASSIFICATION') displayLabel = 'PENDENTE DE CLASSIFICAÇÃO'
   } else {
     if (L === 'OURO') displayLabel = 'GOLD'
     else if (L === 'PRATA') displayLabel = 'SILVER'
     else if (L === 'BRONZE') displayLabel = 'BRONZE'
+    else if (L === 'PENDENTE DE CLASSIFICAÇÃO') displayLabel = 'PENDING CLASSIFICATION'
   }
   
   return <span className={`badge-class ${cls}`}>{displayLabel}</span>
 }
 
-const CLASS_VALUES = ['OURO','PRATA','BRONZE']
+const CLASS_VALUES = ['OURO','PRATA','BRONZE','PENDENTE DE CLASSIFICAÇÃO']
+const CLASS_LABELS_PT = ['OURO','PRATA','BRONZE','PENDENTE DE CLASSIFICAÇÃO']
+const CLASS_LABELS_EN = ['GOLD','SILVER','BRONZE','PENDING']
 
 // Comprehensive list of sovereign states (English names)
 const COUNTRIES = [
@@ -239,8 +248,11 @@ export default function App(){
       <nav aria-label="Main">
         <div className="container nav-inner">
           <div className="logo" aria-label="OrbitHub">
-            <span className="orb" aria-hidden="true"></span>
-            <span>OrbitHub</span>
+            <img
+              src="/logo.png"
+              alt="OrbitHub"
+              className="logo-img"
+            />
           </div>
           <div className="nav-links">
             <div className="lang-switch" role="group" aria-label="Language">
@@ -277,6 +289,9 @@ export default function App(){
         <section id="request" className="container section">
           <div className="kicker">{t.portal_kicker}</div>
           <h2 className="title">{t.portal_title}</h2>
+          <p style={{textAlign:'center', marginTop:'0.5rem', marginBottom:'2rem', color:'rgba(255,255,255,0.7)', fontSize:'1rem'}}>
+            {t.portal_instructions}
+          </p>
           <div className="cards">
             <div className="card" style={{gridColumn:'span 6'}}>
               <h3>{t.client_title}</h3>
@@ -329,7 +344,7 @@ export default function App(){
                   <select value={form.classification} onChange={onChange('classification')}>
                     <option value="">--</option>
                     {CLASS_VALUES.map((val, idx) => (
-                      <option key={val} value={val}>{(lang==='pt' ? ['OURO','PRATA','BRONZE'] : ['GOLD','SILVER','BRONZE'])[idx]}</option>
+                      <option key={val} value={val}>{(lang==='pt' ? CLASS_LABELS_PT : CLASS_LABELS_EN)[idx]}</option>
                     ))}
                   </select>
                 </div>

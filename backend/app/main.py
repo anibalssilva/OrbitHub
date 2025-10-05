@@ -25,22 +25,22 @@ app = FastAPI(title="Sustentabilidade de Satélites")
 
 # # Configure CORS middleware for cross-origin requests
 # # Configura middleware CORS para requisições cross-origin
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],  # Allow all origins / Permite todas as origens
-#     allow_credentials=True,
-#     allow_methods=["*"],  # Allow all HTTP methods / Permite todos os métodos HTTP
-#     allow_headers=["*"],  # Allow all headers / Permite todos os headers
-# )
-FRONTEND_ORIGIN = os.getenv("CORS_ORIGIN", "https://orbithub-lx4e.onrender.com")
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_ORIGIN],
-    allow_methods=["*"],
-    allow_headers=["*"],
-    allow_credentials=False,  # deixe False a menos que realmente use cookies/autenticação
+    allow_origins=["*"],  # Allow all origins / Permite todas as origens
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods / Permite todos os métodos HTTP
+    allow_headers=["*"],  # Allow all headers / Permite todos os headers
 )
+# FRONTEND_ORIGIN = os.getenv("CORS_ORIGIN", "https://orbithub-lx4e.onrender.com")
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=[FRONTEND_ORIGIN],
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+#     allow_credentials=False,  # deixe False a menos que realmente use cookies/autenticação
+# )
 
 
 class SatelliteInput(BaseModel):
