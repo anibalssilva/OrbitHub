@@ -13,6 +13,7 @@ import os
 import json
 from typing import List, Optional, Tuple
 from datetime import datetime
+from functools import lru_cache
 
 import pandas as pd
 
@@ -56,7 +57,7 @@ def get_classified_satellites(force_recompute: bool = False) -> pd.DataFrame:
     """
     # Load from cache if available / Carrega do cache se disponível
     if (not force_recompute) and os.path.exists(CLASSIFIED_CSV):
-        return pd.read_csv(CLASSIFIED_CSV)
+        return load_classified_df()
 
     # Compute classification / Computa classificação
     df_raw, _ = load_ucs_from_data_raw()
@@ -73,6 +74,11 @@ def get_classified_satellites(force_recompute: bool = False) -> pd.DataFrame:
     # Persist for quicker reads later / Persiste para leituras mais rápidas depois
     os.makedirs(os.path.dirname(CLASSIFIED_CSV), exist_ok=True)
     out.to_csv(CLASSIFIED_CSV, index=False)
+    # refresh in‑memory cache / atualiza cache em memória
+    try:
+        load_classified_df.cache_clear()  # type: ignore[attr-defined]
+    except Exception:
+        pass
     return out
 
 
@@ -136,7 +142,8 @@ def filter_satellites(
         return _list_pending_from_celestrak(limit=limit)
 
     # Get all classified satellites / Obtém todos os satélites classificados
-    df = get_classified_satellites()
+    # Use cached DataFrame / Usa DataFrame em cache
+    df = load_classified_df()
 
     df_f = df
     
@@ -163,8 +170,26 @@ def filter_satellites(
 
     # Build response with expected semantic fields using exact column names from CSV
     # Constrói resposta com campos semânticos esperados usando nomes exatos de colunas do CSV
+    # select only necessary columns before iterating / seleciona apenas colunas necessárias
+    needed_cols = [
+        "Name of Satellite, Alternate Names",
+        "Current Official Name of Satellite",
+        "Country/Org of UN Registry",
+        "Country of Operator/Owner",
+        "Operator/Owner",
+        "Purpose",
+        "Detailed Purpose",
+        "SUSTAINABILITY_CLASS",
+    ]
+    available = [c for c in needed_cols if c in df_f.columns]
+    df_sel = df_f.loc[:, available]
+
+    # apply limit early to reduce iteration cost / aplica limite cedo
+    if limit and limit > 0:
+        df_sel = df_sel.head(limit)
+
     records: List[dict] = []
-    for _, row in df_f.iterrows():
+    for _, row in df_sel.iterrows():
         # Get satellite name and extract alternate name if exists
         # Obtém nome do satélite e extrai nome alternativo se existe
         full_name = _safe_get(row, "Name of Satellite, Alternate Names")
@@ -182,10 +207,6 @@ def filter_satellites(
         }
         records.append(rec)
 
-    # Apply limit if specified / Aplica limite se especificado
-    if limit and limit > 0:
-        records = records[:limit]
-
     return records
 
 
@@ -197,14 +218,8 @@ def _list_pending_from_celestrak(limit: int = 50) -> List[dict]:
     Carrega uma lista leve de satélites do CSV Celestrak para a categoria
     "Pendente de Classificação". Campos ausentes retornam "--".
     """
-    # CSV path relative to project root when running from backend/
-    csv_path = os.path.join("..", "data", "raw", "Celestrak_data.csv")
-    try:
-        # The sample file appears to be semicolon-delimited
-        df = pd.read_csv(csv_path, sep=";", engine="python")
-    except Exception:
-        # Fallback: try comma
-        df = pd.read_csv(csv_path)
+    # Load cached Celestrak CSV / Carrega CSV Celestrak em cache
+    df = load_celestrak_df()
 
     # Ensure we only take up to limit rows
     if limit and limit > 0:
@@ -226,6 +241,27 @@ def _list_pending_from_celestrak(limit: int = 50) -> List[dict]:
         records.append(rec)
 
     return records
+
+
+# ---------- Lightweight cached loaders (performance) ----------
+
+@lru_cache(maxsize=1)
+def load_celestrak_df() -> pd.DataFrame:
+    """Load Celestrak CSV once and keep in memory."""
+    csv_path = os.path.join("..", "data", "raw", "Celestrak_data.csv")
+    try:
+        return pd.read_csv(csv_path, sep=";", engine="python")
+    except Exception:
+        return pd.read_csv(csv_path)
+
+
+@lru_cache(maxsize=1)
+def load_classified_df() -> pd.DataFrame:
+    """Load classified satellites CSV once; compute if missing."""
+    if os.path.exists(CLASSIFIED_CSV):
+        return pd.read_csv(CLASSIFIED_CSV)
+    # compute and return if file not present
+    return get_classified_satellites(force_recompute=True)
 
 
 def _safe_get(row, column_name):

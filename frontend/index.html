@@ -459,7 +459,7 @@
       sol_kicker: 'Why OrbitHub?', sol_title: 'Smart filters, unified APIs, and measurable impact.',
       sol1_h: 'Smart Discovery', sol1_p: 'Filter by <strong>resolution</strong>, <strong>band</strong>, <strong>coverage</strong>, and <strong>time window</strong> with AI‑guided recommendations.',
       sol2_h: 'API Consumption', sol2_p: 'Ready‑to‑use SDKs (Python/JS) and predictable limits. <em>Pay‑as‑you‑go</em> with a free monthly quota.',
-      sol3_h: 'Carbon Metric', sol3_p: 'We show estimated emissions by request, data center, and region. Optimize <abbr id="abbr-sus" title="Sustainability">SUS</abbr> without sacrificing performance.',
+      sol3_h: 'Carbon Metric', sol3_p: 'We show estimated emissions by request, data center, and region. Optimize <abbr id="abbr-sus" title="Sustainability">Sustainability</abbr> without sacrificing performance.',
       ds_kicker: 'Featured collections', ds_title: 'Explore datasets ready to try',
       s1_desc: 'Synthetic aperture radar • Res. 10 m • Orbit: LEO', l8_desc: 'Multispectral • 15–100 m • Thermal', s2_desc: '13 bands • 10–60 m • Vegetation indices', c1_desc: 'Brazil/China • 2 m pan • 8 m multispec.',
       sample_btn: 'View sample',
@@ -518,7 +518,7 @@
       pricing_kicker: 'Planos', pricing_title: 'Preços simples e previsíveis',
       pl1_name: 'Explorador', pl1_price: 'R$ 0', pl1_month: '/mês', pl1_li1: '1.000 chamadas/mês', pl1_li2: 'Amostras gratuitas', pl1_li3: 'Dashboard básico', pl1_btn: 'Começar grátis',
       pl2_name: 'Profissional', pl2_price: 'R$ 399', pl2_month: '/mês', pl2_li1: '100k chamadas/mês', pl2_li2: 'Webhooks + SLA', pl2_li3: 'Roteamento carbon‑aware', pl2_btn: 'Assinar',
-      pl3_name: 'Enterprise', pl3_price: 'Custom', pl3_li1: 'Contratos e dados privados', pl3_li2: 'On‑prem / Multi‑cloud', pl3_li3: 'Suporte 24/7', pl3_btn: 'Fale com vendas',
+      pl3_name: 'Empresarial', pl3_price: 'Personalizado', pl3_li1: 'Contratos e dados privados', pl3_li2: 'On‑prem / Multi‑cloud', pl3_li3: 'Suporte 24/7', pl3_btn: 'Fale com vendas',
       faq_kicker: 'FAQ', faq_title: 'Perguntas frequentes',
       q1: 'Como vocês estimam o carbono?', a1: 'Combinamos métricas de energia por região de nuvem + intensidade de carbono da rede para estimar emissões por GB transferido e CPU/GPU‑s.',
       q2: 'Posso trazer meu próprio bucket ou data lake?', a2: 'Sim. Suportamos BYO‑Storage (S3, GCS, ADLS) com indexação assíncrona e chaves KMS do cliente.',
@@ -619,7 +619,10 @@
     $('in-company').setAttribute('placeholder', d.in_company);
     $('in-primary').setAttribute('placeholder', d.in_primary);
     $('in-msg').setAttribute('placeholder', d.in_msg);
-    $('pref-api').textContent = d.pref_api; $('pref-esg').textContent = d.pref_esg; $('pref-premium').textContent = d.pref_premium;
+    // preferences (optional elements may not exist in this layout)
+    (function(){ var el = $('pref-api'); if (el) el.textContent = d.pref_api; })();
+    (function(){ var el = $('pref-esg'); if (el) el.textContent = d.pref_esg; })();
+    (function(){ var el = $('pref-premium'); if (el) el.textContent = d.pref_premium; })();
     $('cta-submit').textContent = d.cta_submit;
 
     // footer

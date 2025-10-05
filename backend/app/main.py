@@ -17,11 +17,14 @@ import os
 import json
 import pandas as pd
 from joblib import load
-from .data_access import filter_satellites, persist_portal_request
+from .data_access import filter_satellites, persist_portal_request, load_celestrak_df, load_classified_df
 from fastapi.responses import RedirectResponse, JSONResponse
+from fastapi.responses import ORJSONResponse
+from starlette.middleware.gzip import GZipMiddleware
+from fastapi.concurrency import run_in_threadpool
 
 # Initialize FastAPI application / Inicializa aplicação FastAPI
-app = FastAPI(title="Sustentabilidade de Satélites")
+app = FastAPI(title="Sustentabilidade de Satélites", default_response_class=ORJSONResponse)
 
 # # Configure CORS middleware for cross-origin requests
 # # Configura middleware CORS para requisições cross-origin
@@ -32,6 +35,7 @@ app.add_middleware(
     allow_methods=["*"],  # Allow all HTTP methods / Permite todos os métodos HTTP
     allow_headers=["*"],  # Allow all headers / Permite todos os headers
 )
+app.add_middleware(GZipMiddleware, minimum_size=800)
 # FRONTEND_ORIGIN = os.getenv("CORS_ORIGIN", "https://orbithub-lx4e.onrender.com")
 
 # app.add_middleware(
@@ -144,8 +148,18 @@ def classify(items: List[SatelliteInput]):
     return [{"label": label} for label in labels]
 
 
+@app.on_event("startup")
+def _warmup():
+    # Pre-load datasets into memory for faster first-hit latency
+    try:
+        load_celestrak_df()
+        load_classified_df()
+    except Exception:
+        pass
+
+
 @app.get("/satellites")
-def satellites(classification: str | None = None, purpose: str | None = None, delivery: str | None = None, limit: int = 50):
+async def satellites(classification: str | None = None, purpose: str | None = None, delivery: str | None = None, limit: int = 50):
     """
     Get filtered list of classified satellites.
     Obtém lista filtrada de satélites classificados.
@@ -159,7 +173,10 @@ def satellites(classification: str | None = None, purpose: str | None = None, de
     Returns:
         List of satellite records with detailed information
     """
-    return filter_satellites(classification=classification, purpose=purpose, delivery=delivery, limit=limit)
+    # run filtering on a worker thread to avoid blocking the event loop
+    result = await run_in_threadpool(lambda: filter_satellites(classification=classification, purpose=purpose, delivery=delivery, limit=limit))
+    # add short-lived HTTP cache to speed up repeated identical queries
+    return ORJSONResponse(result, headers={"Cache-Control": "public, max-age=300"})
 
 
 class PortalRequest(BaseModel):
