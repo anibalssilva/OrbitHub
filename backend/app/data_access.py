@@ -21,8 +21,8 @@ from joblib import load
 
 
 # Directory paths / Caminhos de diretórios
-MODELS_DIR = os.path.join("backend", "app", "models")
-CLASSIFIED_CSV = os.path.join("data", "processed", "satellites_classified.csv")
+MODELS_DIR = os.path.join("app", "models")
+CLASSIFIED_CSV = os.path.join("..", "data", "processed", "satellites_classified.csv")
 
 
 def _load_artifacts():
@@ -243,8 +243,8 @@ def persist_portal_request(payload: dict) -> str:
         Path to the created TXT file
     """
     # Create directories / Cria diretórios
-    out_dir = os.path.join("data", "processed")
-    requests_dir = os.path.join("solicitacoes")
+    out_dir = os.path.join("..", "data", "processed")
+    requests_dir = os.path.join("..", "solicitacoes")
     os.makedirs(out_dir, exist_ok=True)
     os.makedirs(requests_dir, exist_ok=True)
     

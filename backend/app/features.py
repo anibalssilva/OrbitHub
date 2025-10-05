@@ -4,7 +4,8 @@ from typing import Tuple, Optional
 
 
 def load_ucs_from_data_raw() -> Tuple[pd.DataFrame, str]:
-    data_dir = os.path.join("data", "raw")
+    # Go up one level from backend to project root, then to data/raw
+    data_dir = os.path.join("..", "data", "raw")
     excel_path = os.path.join(data_dir, "UCS-Satellite-Database 5-1-2023.xlsx")
     if not os.path.exists(excel_path):
         raise FileNotFoundError("Arquivo UCS XLSX não encontrado em data/raw")

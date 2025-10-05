@@ -7,7 +7,7 @@ from .features import load_ucs_from_data_raw, engineer_features
 
 
 def get_models_dir() -> str:
-    return os.path.join("backend", "app", "models")
+    return os.path.join("app", "models")
 
 
 def load_artifacts():
@@ -39,7 +39,7 @@ def main(output: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--out", default=os.path.join("data", "processed", "satellites_classified.csv"))
+    parser.add_argument("--out", default=os.path.join("..", "data", "processed", "satellites_classified.csv"))
     args = parser.parse_args()
     main(args.out)
 

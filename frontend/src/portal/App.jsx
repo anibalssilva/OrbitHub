@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import './style.css'
 
-const API = 'http://localhost:8000'
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 const I18N = {
   en: {
