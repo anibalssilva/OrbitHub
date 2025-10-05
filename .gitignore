@@ -76,8 +76,8 @@ dist-ssr/
 # backend/app/models/*.joblib
 
 # Request files
-solicitacoes/*.txt
-backend/solicitacoes/*.txt
+# solicitacoes/*.txt
+# backend/solicitacoes/*.txt
 
 # Logs
 logs/
@@ -114,6 +114,6 @@ scripts/dev.ps1
 # Duplicate directories
 backend/backend/
 backend/data/
-backend/solicitacoes/
+# backend/solicitacoes/
 frontend/.a/
 
