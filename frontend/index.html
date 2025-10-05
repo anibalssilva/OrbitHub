@@ -62,6 +62,7 @@
     .neon{background: linear-gradient(90deg, #fff, var(--brand), #fff); background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation: shine 8s linear infinite}
     @keyframes shine{0%{background-position:0 0}100%{background-position:200% 0}}
     .sub{font-size: clamp(16px, 2.2vw, 20px); color:var(--muted)}
+    .hero-note{display:block; margin-top:6px; color:var(--brand); opacity:.85; font-weight:600}
 
     .searchbar{display:flex; gap:10px; margin-top:18px; background:var(--panel); border:1px solid rgba(255,255,255,.08); padding:10px; border-radius:16px; box-shadow: var(--shadow)}
     .searchbar input{flex:1; background:transparent; color:var(--txt); border:none; outline:none; font-size:16px}
@@ -453,7 +454,7 @@
       nav_explore: 'Explore', nav_solutions: 'Solutions', nav_pricing: 'Pricing', nav_sustain: 'Sustainability', nav_portal: 'Open Request Portal', nav_cta: 'Get Started',
       badge: '⚡ Open Beta • APIs & Samples',
       hero_title: '<span class="neon">Satellite Data Marketplace</span> for a smarter, more sustainable planet.',
-      hero_sub: 'Discover multi‑source collections, apply smart filters, and consume via API. Carbon impact transparency in every request. We work to optimize and reduce the need for new launches in LEO.',
+      hero_sub: 'Discover multi‑source collections, apply smart filters, and consume via API. Carbon impact transparency in every request. <span class="hero-note">We develop solutions focused on operational efficiency and reducing new launches in LEO, prioritizing performance and sustainability in Space.</span>',
       search_ph: 'Search by satellite, mission, spectral band…', search_title: 'Search', filter_title: 'Quick filter',
       chip_carbon: '🌿 Carbon‑aware', chip_sats: '🛰️ 1200+ satellites', chip_samples: '📦 Samples included',
       sol_kicker: 'Why OrbitHub?', sol_title: 'Smart filters, unified APIs, and measurable impact.',
@@ -495,7 +496,7 @@
       nav_explore: 'Explorar', nav_solutions: 'Soluções', nav_pricing: 'Preços', nav_sustain: 'Sustentabilidade', nav_portal: 'Abrir Portal de Requisições', nav_cta: 'Começar',
       badge: '⚡ Beta Aberto • APIs e Amostras',
       hero_title: '<span class="neon">Marketplace de Dados de Satélites</span> para um planeta mais inteligente e sustentável.',
-      hero_sub: 'Descubra coleções multi‑fonte, aplique filtros inteligentes e consuma via API. Transparência de impacto de carbono em cada requisição. Trabalhamos para Otimizar e Diminuir a necessidade de novos lançamentos na LEO.',
+      hero_sub: 'Descubra coleções multi‑fonte, aplique filtros inteligentes e consuma via API. Transparência de impacto de carbono em cada requisição. <span class="hero-note">Desenvolvemos soluções voltadas à eficiência operacional e à redução de novos lançamentos em órbita LEO, priorizando desempenho e sustentabilidade no Espaço.</span>',
       search_ph: 'Buscar por satélite, missão, banda espectral…', search_title: 'Buscar', filter_title: 'Filtro rápido',
       chip_carbon: '🌿 Carbon‑aware', chip_sats: '🛰️ 1200+ satélites', chip_samples: '📦 Amostras incluídas',
       sol_kicker: 'Por que OrbitHub?', sol_title: 'Filtros inteligentes, APIs unificadas e impacto mensurável.',
@@ -560,7 +561,7 @@
     // hero
     $('badge-text').textContent = d.badge;
     $('hero-title').innerHTML = d.hero_title;
-    $('hero-sub').textContent = d.hero_sub;
+    $('hero-sub').innerHTML = d.hero_sub; // allows subtle highlighted note
     $('search-input').setAttribute('placeholder', d.search_ph);
     $('search-btn').setAttribute('title', d.search_title);
     $('filter-btn').setAttribute('title', d.filter_title);
