@@ -229,125 +229,25 @@ def _clean_value(value):
 
 def persist_portal_request(payload: dict) -> str:
     """
-    Persist client portal request to both JSON log and human-readable TXT file.
-    Persiste requisição do portal do cliente em log JSON e arquivo TXT legível.
+    Persist client portal request to JSON log and send email notification.
+    Persiste requisição do portal do cliente em log JSON e envia notificação por email.
     
     Args:
-        payload: Dictionary containing all request data including:
-                - Client info (name, cnpj, address, email, sector, country)
-                - Request details (purpose, classification, delivery, description)
-                - Selected satellites list
-                - Language preference (en/pt)
-                
+        payload: Dictionary containing all request data
+        
     Returns:
-        Path to the created TXT file
+        Status message
     """
     # Create directories / Cria diretórios
     out_dir = os.path.join("..", "data", "processed")
-    requests_dir = os.path.join("..", "solicitacoes")
     os.makedirs(out_dir, exist_ok=True)
-    os.makedirs(requests_dir, exist_ok=True)
     
     # Save JSON version for processing / Salva versão JSON para processamento
     jsonl_path = os.path.join(out_dir, "portal_requests.jsonl")
     with open(jsonl_path, "a", encoding="utf-8") as f:
         f.write(json.dumps(payload, ensure_ascii=False) + "\n")
     
-    # Create a human-readable TXT file / Cria arquivo TXT legível
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    client_name = payload.get('name', 'unknown').replace(' ', '_')[:30]
-    txt_filename = f"solicitacao_{client_name}_{timestamp}.txt"
-    txt_path = os.path.join(requests_dir, txt_filename)
+    # Log the request (since files are temporary in Render)
+    print(f"REQUEST RECEIVED: {payload.get('name', 'Unknown')} - {payload.get('purpose', 'No purpose')}")
     
-    # Format the content based on language / Formata o conteúdo baseado no idioma
-    lang = payload.get('language', 'en')
-    selected_satellites = payload.get('selected_satellites', [])
-    
-    with open(txt_path, "w", encoding="utf-8") as f:
-        if lang == 'pt':
-            # Portuguese format / Formato em português
-            f.write("=" * 80 + "\n")
-            f.write("SOLICITAÇÃO DE DADOS DE SATÉLITES\n")
-            f.write("=" * 80 + "\n\n")
-            f.write(f"Data da Solicitação: {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n\n")
-            
-            f.write("-" * 80 + "\n")
-            f.write("INFORMAÇÕES DO CLIENTE\n")
-            f.write("-" * 80 + "\n")
-            f.write(f"Nome: {payload.get('name', 'N/A')}\n")
-            f.write(f"CNPJ: {payload.get('cnpj', 'N/A')}\n")
-            f.write(f"Endereço: {payload.get('address', 'N/A')}\n")
-            f.write(f"Email: {payload.get('email', 'N/A')}\n")
-            f.write(f"Ramo de Atividade: {payload.get('sector', 'N/A')}\n")
-            f.write(f"País: {payload.get('country', 'N/A')}\n\n")
-            
-            f.write("-" * 80 + "\n")
-            f.write("DETALHES DA SOLICITAÇÃO\n")
-            f.write("-" * 80 + "\n")
-            f.write(f"Finalidade: {payload.get('purpose', 'N/A')}\n")
-            f.write(f"Classificação Ecológica: {payload.get('classification', 'Todas')}\n")
-            f.write(f"Tipo de Entrega: {payload.get('delivery', 'N/A')}\n")
-            f.write(f"Descrição: {payload.get('description', 'N/A')}\n\n")
-            
-            f.write("-" * 80 + "\n")
-            f.write(f"SATÉLITES SELECIONADOS ({len(selected_satellites)})\n")
-            f.write("-" * 80 + "\n")
-        else:
-            # English format / Formato em inglês
-            f.write("=" * 80 + "\n")
-            f.write("SATELLITE DATA REQUEST\n")
-            f.write("=" * 80 + "\n\n")
-            f.write(f"Request Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-            
-            f.write("-" * 80 + "\n")
-            f.write("CLIENT INFORMATION\n")
-            f.write("-" * 80 + "\n")
-            f.write(f"Name: {payload.get('name', 'N/A')}\n")
-            f.write(f"Company ID: {payload.get('cnpj', 'N/A')}\n")
-            f.write(f"Address: {payload.get('address', 'N/A')}\n")
-            f.write(f"Email: {payload.get('email', 'N/A')}\n")
-            f.write(f"Business Sector: {payload.get('sector', 'N/A')}\n")
-            f.write(f"Country: {payload.get('country', 'N/A')}\n\n")
-            
-            f.write("-" * 80 + "\n")
-            f.write("REQUEST DETAILS\n")
-            f.write("-" * 80 + "\n")
-            f.write(f"Purpose: {payload.get('purpose', 'N/A')}\n")
-            f.write(f"Ecological Classification: {payload.get('classification', 'All')}\n")
-            f.write(f"Delivery Type: {payload.get('delivery', 'N/A')}\n")
-            f.write(f"Description: {payload.get('description', 'N/A')}\n\n")
-            
-            f.write("-" * 80 + "\n")
-            f.write(f"SELECTED SATELLITES ({len(selected_satellites)})\n")
-            f.write("-" * 80 + "\n")
-        
-        # Write selected satellites details / Escreve detalhes dos satélites selecionados
-        if selected_satellites:
-            for idx, sat in enumerate(selected_satellites, 1):
-                f.write(f"\n{idx}. {sat.get('name_of_satellite', 'Unknown')}\n")
-                if sat.get('alternate_names'):
-                    f.write(f"   Alternate Names: {sat.get('alternate_names')}\n")
-                if sat.get('sustainability_class'):
-                    f.write(f"   Ecological Classification: {sat.get('sustainability_class')}\n")
-                if sat.get('country_un_registry'):
-                    f.write(f"   UN Registry: {sat.get('country_un_registry')}\n")
-                if sat.get('country_operator_owner'):
-                    f.write(f"   Country/Operator: {sat.get('country_operator_owner')}\n")
-                if sat.get('operator_owner'):
-                    f.write(f"   Owner: {sat.get('operator_owner')}\n")
-                if sat.get('purpose'):
-                    f.write(f"   Purpose: {sat.get('purpose')}\n")
-                if sat.get('detailed_purpose'):
-                    f.write(f"   Detailed Purpose: {sat.get('detailed_purpose')}\n")
-        else:
-            f.write("\n(No satellites selected)\n")
-        
-        # Footer / Rodapé
-        f.write("\n" + "=" * 80 + "\n")
-        if lang == 'pt':
-            f.write("FIM DA SOLICITAÇÃO\n")
-        else:
-            f.write("END OF REQUEST\n")
-        f.write("=" * 80 + "\n")
-    
-    return txt_path
+    return "Request logged successfully"
