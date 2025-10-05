@@ -474,7 +474,7 @@ This project is licensed under the **MIT License** - see [LICENSE](./LICENSE) fo
 
 <div align="center">
 
-**Made with ❤️ for a sustainable space future**
+**Made for a sustainable space future**
 
 </div>
 
@@ -717,6 +717,6 @@ Este projeto está licenciado sob a **Licença MIT** - veja [LICENSE](./LICENSE)
 
 <div align="center">
 
-**Feito com ❤️ para um futuro espacial sustentável**
+**Feito para um futuro espacial sustentável**
 
 </div>

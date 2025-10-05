@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: orbithub-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    routes:
+      - type: rewrite
+        source: /portal.html
+        destination: /portal.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
