@@ -10,6 +10,7 @@ system, enabling data queries and requests via web portal.
 """
 
 from fastapi import FastAPI
+from fastapi import Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
@@ -106,6 +107,12 @@ def root():
 @app.get("/health", include_in_schema=False, tags=["meta"])
 def health():
     return JSONResponse({"status": "ok"})
+
+
+@app.head("/health", include_in_schema=False, tags=["meta"])
+def health_head():
+    # Explicit HEAD support: return 200 with no body
+    return Response(status_code=200)
 
 
 @app.post("/classify")
