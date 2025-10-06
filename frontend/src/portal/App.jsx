@@ -60,6 +60,7 @@ const I18N = {
     other_label: 'Other', other_placeholder: 'Describe the purpose', other_hint: 'Provide the purpose if it is not listed.', specify_other: 'Specify purpose',
     filter_btn: 'Filter Satellites', submit_btn: 'Submit Request', satellites: 'Satellites (sample)',
     no_results: 'No results',
+    loading: 'Loading...',
     // toasts
     toast_ok: 'Request saved'
   },
@@ -116,6 +117,7 @@ const I18N = {
     other_label: 'Outro', other_placeholder: 'Descreva a finalidade', other_hint: 'Informe a finalidade caso não esteja listada.', specify_other: 'Especificar finalidade',
     filter_btn: 'Filtrar Satélites', submit_btn: 'Enviar Solicitação', satellites: 'Satélites (amostra)',
     no_results: 'Sem resultados',
+    loading: 'Carregando...',
     toast_ok: 'Solicitação registrada'
   }
 }
@@ -181,6 +183,7 @@ export default function App(){
   const [form, setForm] = useState({ name:'', cnpj:'', address:'', email:'', sector:'', country:'', purpose:'', purposeOther:'', classification:'', delivery:'API', description:'' })
   const [rows, setRows] = useState([])
   const [selectedSatellites, setSelectedSatellites] = useState([])
+  const [loading, setLoading] = useState(false)
 
   const onChange = (k)=>(e)=> setForm(s=>({...s, [k]: e.target.value}))
 
@@ -196,17 +199,25 @@ export default function App(){
   }
 
   async function filter(){
-    const params = new URLSearchParams()
-    const otherLabel = I18N[lang].other_label || 'Other'
-    const effectivePurpose = form.purpose === otherLabel ? form.purposeOther : form.purpose
-    if(form.classification) params.set('classification', form.classification)
-    if(effectivePurpose) params.set('purpose', effectivePurpose)
-    if(form.delivery) params.set('delivery', form.delivery)
-    params.set('limit','24')
-    const res = await fetch(`${API}/satellites?${params.toString()}`)
-    const data = await res.json()
-    setRows(data)
-    setSelectedSatellites([]) // Clear selection when filtering
+    setLoading(true)
+    try {
+      const params = new URLSearchParams()
+      const otherLabel = I18N[lang].other_label || 'Other'
+      const effectivePurpose = form.purpose === otherLabel ? form.purposeOther : form.purpose
+      if(form.classification) params.set('classification', form.classification)
+      if(effectivePurpose) params.set('purpose', effectivePurpose)
+      if(form.delivery) params.set('delivery', form.delivery)
+      params.set('limit','24')
+      const res = await fetch(`${API}/satellites?${params.toString()}`)
+      const data = await res.json()
+      setRows(data)
+      setSelectedSatellites([]) // Clear selection when filtering
+    } catch (err) {
+      console.error('Filter error:', err)
+      setRows([])
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function submit(){
@@ -357,12 +368,17 @@ export default function App(){
                 <div style={{gridColumn:'span 12'}}><label>{t.description} <span className="info" title={t.description_hint}>!</span></label><textarea value={form.description} onChange={onChange('description')} placeholder={t.description}></textarea></div>
               </div>
               <div style={{display:'flex', gap:10, marginTop:12}}>
-                <button className="btn-ghost" onClick={filter}>🔎 {t.filter_btn}</button>
+                <button className="btn-ghost" onClick={filter} disabled={loading}>🔎 {t.filter_btn}</button>
                 <button className="btn" onClick={submit}>🚀 {t.submit_btn}</button>
               </div>
             </div>
             <div className="card" style={{gridColumn:'span 12'}}>
               <h3>{t.satellites} {selectedSatellites.length > 0 && <span style={{color:'var(--primary)', fontSize:'0.9em'}}>({selectedSatellites.length} {lang === 'pt' ? 'selecionado(s)' : 'selected'})</span>}</h3>
+              {loading && (
+                <div className="progress" role="progressbar" aria-label={lang==='pt'?'Carregando':'Loading'}>
+                  <div className="progress-bar"></div>
+                </div>
+              )}
               <div className="list">
                 {rows?.length? rows.map((r,i)=> {
                   const isSelected = selectedSatellites.some(s => s.name_of_satellite === r.name_of_satellite)
@@ -387,7 +403,7 @@ export default function App(){
                       </div>
                     </div>
                   )
-                }) : <em>{t.no_results}</em>}
+                }) : (loading ? <em>{t.loading}</em> : <em>{t.no_results}</em>)}
               </div>
             </div>
           </div>
