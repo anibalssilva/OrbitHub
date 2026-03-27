@@ -74,12 +74,14 @@ footer{border-top:1px solid rgba(255,255,255,.08);padding:24px 0 60px;color:var(
   .card{grid-column:span 12 !important}
   .item{grid-column:span 12 !important}
   .row>div{grid-column:span 12 !important}
+  .cards>div{grid-column:span 12 !important}
   .cards{gap:16px}
   .card{padding:16px}
   .title{font-size:26px}
   .sub{font-size:16px}
   .section{padding:32px 0}
   .list{grid-template-columns:1fr}
+  .list>div{grid-column:span 12 !important}
   .nav-inner{padding:14px 0}
   .logo-img{width:100px}
 }
@@ -90,16 +92,19 @@ footer{border-top:1px solid rgba(255,255,255,.08);padding:24px 0 60px;color:var(
   .hero{padding:24px 0}
   .title{font-size:22px}
   .sub{font-size:14px}
-  .card{padding:14px;border-radius:14px}
+  .card{padding:14px;border-radius:14px;grid-column:span 12 !important}
   .cards{gap:12px}
+  .cards>div{grid-column:span 12 !important}
   .row{gap:10px}
+  .row>div{grid-column:span 12 !important}
   input,select,textarea{padding:12px;font-size:16px}
   .btn,.btn-ghost{width:100%;justify-content:center;padding:14px}
   .card>div:last-child{flex-direction:column}
   .badge{font-size:11px;padding:5px 8px}
   .chip{font-size:12px;padding:6px 10px}
-  .item{padding:10px}
+  .item{padding:10px;grid-column:span 12 !important}
   .item h4{font-size:14px}
+  .list>div{grid-column:span 12 !important}
   .badge-class{font-size:11px;padding:4px 8px}
   footer{padding:20px 0 40px}
 }
