@@ -150,6 +150,47 @@ const CLASS_VALUES = ['OURO','PRATA','BRONZE','PENDENTE DE CLASSIFICAÇÃO']
 const CLASS_LABELS_PT = ['OURO','PRATA','BRONZE','PENDENTE DE CLASSIFICAÇÃO']
 const CLASS_LABELS_EN = ['GOLD','SILVER','BRONZE','PENDING']
 
+// Mapeamento PT→EN para enviar valores consistentes à API
+const PURPOSE_PT_TO_EN = {
+  'Observação da Terra': 'Earth Observation',
+  'Desenvolvimento de Tecnologia': 'Technology Development',
+  'Comunicações': 'Communications',
+  'Ciências da Terra': 'Earth Science',
+  'Ciências Espaciais': 'Space Science',
+  'Ciências Espaciais/Demonstração Tecnológica': 'Space Science/Technology Demonstration',
+  'Comunicações/Desenvolvimento de Tecnologia': 'Communications/Technology Development',
+  'Comunicações/Rastreamento Marítimo': 'Communications/Maritime Tracking',
+  'Demonstração Tecnológica': 'Technology Demonstration',
+  'Navegação/Posicionamento Global': 'Navigation/Global Positioning',
+  'Observação da Terra/Desenvolvimento de Tecnologia': 'Earth Observation/Technology Development',
+  'Observação da Terra/Comunicações': 'Earth Observation/Communications',
+  'Observação da Terra/Espaço': 'Earth/Space Observation',
+  'Educacional': 'Educational',
+  'Observação da Terra/Ciências da Terra': 'Earth Observation/Earth Science',
+  'Plataforma': 'Platform',
+  'Observação da Terra/Ciências Espaciais': 'Earth Observation/Space Science',
+  'Observação da Terra/Navegação': 'Earth Observation/Navigation',
+  'Comunicações/Navegação': 'Communications/Navigation',
+  'Observação Espacial': 'Space Observation',
+  'Vigilância': 'Surveillance',
+  'Navegação/Posicionamento Regional': 'Navigation/Regional Positioning',
+  'Ciências Espaciais/Desenvolvimento de Tecnologia': 'Space Science/Technology Development',
+  'Tecnologia de Extensão de Missão': 'Mission Extension Technology',
+  'Ciências da Terra/Observação da Terra': 'Earth Science/Earth Observation',
+  'Observação da Terra/Comunicações/Ciências Espaciais': 'Earth Observation/Communications/Space Science',
+  'Meteorológico': 'Meteorological',
+  'Desenvolvimento de Tecnologia/Educacional': 'Technology Development/Educational',
+  'Posicionamento por Satélite': 'Satellite Positioning',
+  'Outro': 'Other'
+}
+
+const CLASS_PT_TO_EN = {
+  'OURO': 'GOLD',
+  'PRATA': 'SILVER',
+  'BRONZE': 'BRONZE',
+  'PENDENTE DE CLASSIFICAÇÃO': 'PENDING'
+}
+
 // Comprehensive list of sovereign states (English names)
 const COUNTRIES = [
   'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan',
@@ -203,8 +244,18 @@ export default function App(){
     try {
       const params = new URLSearchParams()
       const otherLabel = I18N[lang].other_label || 'Other'
-      const effectivePurpose = form.purpose === otherLabel ? form.purposeOther : form.purpose
-      if(form.classification) params.set('classification', form.classification)
+      let effectivePurpose = form.purpose === otherLabel ? form.purposeOther : form.purpose
+      
+      // Converter PT→EN para a API
+      if (lang === 'pt' && effectivePurpose && PURPOSE_PT_TO_EN[effectivePurpose]) {
+        effectivePurpose = PURPOSE_PT_TO_EN[effectivePurpose]
+      }
+      let effectiveClass = form.classification
+      if (lang === 'pt' && effectiveClass && CLASS_PT_TO_EN[effectiveClass]) {
+        effectiveClass = CLASS_PT_TO_EN[effectiveClass]
+      }
+      
+      if(effectiveClass) params.set('classification', effectiveClass)
       if(effectivePurpose) params.set('purpose', effectivePurpose)
       if(form.delivery) params.set('delivery', form.delivery)
       params.set('limit','24')
@@ -222,11 +273,21 @@ export default function App(){
 
   async function submit(){
     const otherLabel = I18N[lang].other_label || 'Other'
-    const effectivePurpose = form.purpose === otherLabel ? form.purposeOther : form.purpose
+    let effectivePurpose = form.purpose === otherLabel ? form.purposeOther : form.purpose
+    
+    // Converter PT→EN para a API
+    if (lang === 'pt' && effectivePurpose && PURPOSE_PT_TO_EN[effectivePurpose]) {
+      effectivePurpose = PURPOSE_PT_TO_EN[effectivePurpose]
+    }
+    let effectiveClass = form.classification || null
+    if (lang === 'pt' && effectiveClass && CLASS_PT_TO_EN[effectiveClass]) {
+      effectiveClass = CLASS_PT_TO_EN[effectiveClass]
+    }
+    
     const payload = { 
       ...form, 
       purpose: effectivePurpose, 
-      classification: form.classification || null, 
+      classification: effectiveClass, 
       language: lang,
       selected_satellites: selectedSatellites
     }
