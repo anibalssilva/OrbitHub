@@ -563,6 +563,11 @@
 
   function setLang(lang){
     const isPT = lang === 'pt';
+    
+    // lang buttons state - atualiza primeiro para feedback visual imediato
+    $('lang-en').classList.toggle('active', !isPT); $('lang-en').setAttribute('aria-pressed', String(!isPT));
+    $('lang-pt').classList.toggle('active', isPT);  $('lang-pt').setAttribute('aria-pressed', String(isPT));
+    
     document.documentElement.setAttribute('lang', isPT ? 'pt-BR' : 'en');
     document.documentElement.setAttribute('data-lang', isPT ? 'pt' : 'en');
 
@@ -650,10 +655,6 @@
     // footer
     $('foot-tag').textContent = d.foot_tag; $('foot-prod').textContent = d.foot_prod; $('foot-comp').textContent = d.foot_comp; $('foot-contact').textContent = d.foot_contact;
     $('foot-explore').textContent = d.foot_explore; $('foot-plans').textContent = d.foot_plans; $('foot-faq').textContent = d.foot_faq; $('foot-about').textContent = d.foot_about; $('foot-careers').textContent = d.foot_careers; $('foot-press').textContent = d.foot_press; $('foot-cta').textContent = d.foot_cta;
-
-    // lang buttons state
-    $('lang-en').classList.toggle('active', !isPT); $('lang-en').setAttribute('aria-pressed', String(!isPT));
-    $('lang-pt').classList.toggle('active', isPT);  $('lang-pt').setAttribute('aria-pressed', String(isPT));
   }
 
   function stripHTML(s){ const div=document.createElement('div'); div.innerHTML=s; return div.textContent || div.innerText || ''; }
