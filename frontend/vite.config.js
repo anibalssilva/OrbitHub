@@ -7,7 +7,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: './index.html',
-        portal: './portal.html'
+        portal: './portal.html',
+        amostras: './amostras.html'
       }
     }
   },
