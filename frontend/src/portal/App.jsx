@@ -306,13 +306,13 @@ export default function App(){
 
       <nav aria-label="Main">
         <div className="container nav-inner">
-          <div className="logo" aria-label="OrbitHub">
+          <a href="/" className="logo" aria-label="OrbitHub">
             <img
               src="/logo.png"
               alt="OrbitHub"
               className="logo-img"
             />
-          </div>
+          </a>
           <div className="nav-links">
             <div className="lang-switch" role="group" aria-label="Language">
               <button className={`lang ${lang==='en'?'active':''}`} aria-pressed={lang==='en'} onClick={()=>{document.documentElement.lang='en';setLang('en')}}>EN</button>
