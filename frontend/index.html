@@ -139,7 +139,9 @@
     @media (max-width: 980px){
       .hero{grid-template-columns: 1fr;}
       .cards .card, .datasets .dataset, .steps .step, .stats .stat, .pricing .plan, .faq details, .foot-col{grid-column: span 12}
-      .nav-links{display:none}
+      .nav-inner{flex-wrap:wrap;gap:12px}
+      .nav-links{flex-wrap:wrap;justify-content:center;gap:8px;width:100%}
+      .nav-links a{padding:6px 10px;font-size:14px}
     }
   </style>
 </head>
