@@ -184,12 +184,7 @@ const PURPOSE_PT_TO_EN = {
   'Outro': 'Other'
 }
 
-const CLASS_PT_TO_EN = {
-  'OURO': 'GOLD',
-  'PRATA': 'SILVER',
-  'BRONZE': 'BRONZE',
-  'PENDENTE DE CLASSIFICAÇÃO': 'PENDING'
-}
+
 
 // Comprehensive list of sovereign states (English names)
 const COUNTRIES = [
@@ -246,16 +241,12 @@ export default function App(){
       const otherLabel = I18N[lang].other_label || 'Other'
       let effectivePurpose = form.purpose === otherLabel ? form.purposeOther : form.purpose
       
-      // Converter PT→EN para a API
+      // Converter PT→EN para a API (apenas purpose, classification já está em PT no banco)
       if (lang === 'pt' && effectivePurpose && PURPOSE_PT_TO_EN[effectivePurpose]) {
         effectivePurpose = PURPOSE_PT_TO_EN[effectivePurpose]
       }
-      let effectiveClass = form.classification
-      if (lang === 'pt' && effectiveClass && CLASS_PT_TO_EN[effectiveClass]) {
-        effectiveClass = CLASS_PT_TO_EN[effectiveClass]
-      }
       
-      if(effectiveClass) params.set('classification', effectiveClass)
+      if(form.classification) params.set('classification', form.classification)
       if(effectivePurpose) params.set('purpose', effectivePurpose)
       if(form.delivery) params.set('delivery', form.delivery)
       params.set('limit','24')
@@ -275,19 +266,15 @@ export default function App(){
     const otherLabel = I18N[lang].other_label || 'Other'
     let effectivePurpose = form.purpose === otherLabel ? form.purposeOther : form.purpose
     
-    // Converter PT→EN para a API
+    // Converter PT→EN para a API (apenas purpose, classification já está em PT no banco)
     if (lang === 'pt' && effectivePurpose && PURPOSE_PT_TO_EN[effectivePurpose]) {
       effectivePurpose = PURPOSE_PT_TO_EN[effectivePurpose]
-    }
-    let effectiveClass = form.classification || null
-    if (lang === 'pt' && effectiveClass && CLASS_PT_TO_EN[effectiveClass]) {
-      effectiveClass = CLASS_PT_TO_EN[effectiveClass]
     }
     
     const payload = { 
       ...form, 
       purpose: effectivePurpose, 
-      classification: effectiveClass, 
+      classification: form.classification || null, 
       language: lang,
       selected_satellites: selectedSatellites
     }
