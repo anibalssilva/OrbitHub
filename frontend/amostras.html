@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title id="meta-title">OrbitHub • Samples</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#070a0f;--panel:rgba(255,255,255,.06);--panel-2:rgba(255,255,255,.10);--txt:#e6f6ff;--muted:#9ab6c2;--brand:#00fff0;--brand-2:#8a2be2;--accent:#00d1ff;--radius:18px;--shadow:0 10px 30px rgba(0,255,240,.08),inset 0 1px 0 rgba(255,255,255,.05);--grid-gap:clamp(16px,2vw,24px)}
+    *{box-sizing:border-box}html,body{height:100%}
+    body{margin:0;font-family:'Outfit',system-ui,sans-serif;color:var(--txt);background:radial-gradient(1200px 800px at 80% -20%,rgba(138,43,226,.25),transparent 60%),radial-gradient(1000px 600px at -20% 120%,rgba(0,255,240,.18),transparent 65%),var(--bg);line-height:1.4;overflow-x:hidden}
+    .space{position:fixed;inset:0;z-index:-2}
+    .grid-overlay{position:fixed;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(circle at 50% 40%,rgba(0,0,0,.7),transparent 70%)}
+    a{color:var(--brand)}
+    .container{width:min(1180px,92%);margin-inline:auto}
+    nav{position:sticky;top:0;backdrop-filter:blur(8px);background:linear-gradient(180deg,rgba(7,10,15,.7),rgba(7,10,15,.35));border-bottom:1px solid rgba(255,255,255,.08);z-index:50}
+    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+    .logo-img{width:180px;height:auto;display:block;object-fit:contain}
+    .nav-links{display:flex;gap:18px;align-items:center}
+    .nav-links a{padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--txt);opacity:.9}
+    .nav-links a:hover{background:var(--panel)}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;text-decoration:none;color:#001015;background:linear-gradient(135deg,var(--brand),var(--accent));font-weight:700;box-shadow:0 8px 24px rgba(0,255,240,.22)}
+    .lang-switch{display:flex;gap:6px;align-items:center}
+    .lang{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--txt);padding:6px 10px;border-radius:10px;cursor:pointer}
+    .lang.active{background:rgba(255,255,255,.18)}
+    .section{padding:clamp(32px,6vw,72px) 0}
+    .kicker{color:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-weight:600;font-size:12px}
+    .title{font-size:clamp(22px,4vw,34px);margin:8px 0 16px}
+    .neon{background:linear-gradient(90deg,#fff,var(--brand),#fff);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 8s linear infinite}
+    @keyframes shine{0%{background-position:0 0}100%{background-position:200% 0}}
+
+    /* Gallery */
+    .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--grid-gap)}
+    .gallery-item{background:var(--panel);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .3s}
+    .gallery-item:hover{transform:translateY(-4px)}
+    .gallery-item img{width:100%;display:block;aspect-ratio:4/3;object-fit:cover;background:#0a0e14}
+    .gallery-item .caption{padding:12px 14px}
+    .gallery-item .caption h3{margin:0 0 4px;font-size:15px}
+    .gallery-item .caption p{margin:0;color:var(--muted);font-size:13px}
+
+    /* Lightbox */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:1000;cursor:zoom-out}
+    .lightbox.active{display:flex}
+    .lightbox img{max-width:92vw;max-height:90vh;border-radius:12px;box-shadow:0 0 60px rgba(0,255,240,.15)}
+
+    footer{border-top:1px solid rgba(255,255,255,.08);padding:24px 0;color:var(--muted);text-align:center}
+    @media(max-width:980px){.nav-links{display:none}}
+  </style>
+</head>
+<body>
+  <canvas id="space" class="space" aria-hidden="true"></canvas>
+  <div class="grid-overlay" aria-hidden="true"></div>
+
+  <nav aria-label="Main">
+    <div class="container nav-inner">
+      <a href="/"><img src="/logo.png" alt="OrbitHub" class="logo-img"/></a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/portal.html" id="nav-portal">Portal</a>
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button id="lang-en" class="lang active" aria-pressed="true">EN</button>
+          <button id="lang-pt" class="lang" aria-pressed="false">PT</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- GIF Gallery -->
+    <section class="container section">
+      <div id="gal-kicker" class="kicker">Satellite Imagery</div>
+      <h2 id="gal-title" class="title"><span class="neon" id="gal-neon">Data Samples</span></h2>
+      <p id="gal-desc" style="color:var(--muted);margin-bottom:24px">Animated GIF samples from satellite sensors — click to enlarge.</p>
+      <div class="gallery" id="gallery"></div>
+    </section>
+
+  </main>
+
+  <footer><div class="container">© <span id="year"></span> OrbitHub</div></footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="this.classList.remove('active')">
+    <img id="lb-img" src="" alt=""/>
+  </div>
+
+  <script>
+  document.getElementById('year').textContent=new Date().getFullYear();
+
+  // GIF metadata
+  const GIFS=[
+    {file:'ams_bm_baixa_2018-01-08.gif',en:'Brightness Temperature — 2018-01-08',pt:'Temperatura de Brilho — 2018-01-08'},
+    {file:'ams_realcada_baixa_2018-01-08.gif',en:'Enhanced Image — 2018-01-08',pt:'Imagem Realçada — 2018-01-08'},
+    {file:'ams_realce_baixa_2018-01-08.gif',en:'Enhancement — 2018-01-08',pt:'Realce — 2018-01-08'},
+    {file:'ams_ret_ch08_baixa_2026-03-27.gif',en:'Channel 08 — 2026-03-27',pt:'Canal 08 — 2026-03-27'},
+    {file:'ams_ret_ch09_baixa_2026-03-27.gif',en:'Channel 09 — 2026-03-27',pt:'Canal 09 — 2026-03-27'},
+    {file:'ams_ret_ch10_baixa_2026-03-27.gif',en:'Channel 10 — 2026-03-27',pt:'Canal 10 — 2026-03-27'},
+    {file:'ams_ret_ch12_baixa_2026-03-27.gif',en:'Channel 12 — 2026-03-27',pt:'Canal 12 — 2026-03-27'},
+    {file:'ams_ret_ch16_baixa_2026-03-27.gif',en:'Channel 16 — 2026-03-27',pt:'Canal 16 — 2026-03-27'}
+  ];
+
+  const I18N={
+    en:{kicker:'Satellite Imagery',title:'Data Samples',desc:'Animated GIF samples from satellite sensors — click to enlarge.',portal:'Portal'},
+    pt:{kicker:'Imagens de Satélite',title:'Amostras de Dados',desc:'Amostras animadas (GIF) de sensores de satélite — clique para ampliar.',portal:'Portal'}
+  };
+
+  function render(lang){
+    const d=I18N[lang],isPT=lang==='pt';
+    document.documentElement.setAttribute('lang',isPT?'pt-BR':'en');
+    document.documentElement.setAttribute('data-lang',lang);
+    document.getElementById('meta-title').textContent='OrbitHub • '+(isPT?'Amostras':'Samples');
+    document.getElementById('gal-kicker').textContent=d.kicker;
+    document.getElementById('gal-neon').textContent=d.title;
+    document.getElementById('gal-desc').textContent=d.desc;
+    document.getElementById('nav-portal').textContent=d.portal;
+    document.getElementById('lang-en').classList.toggle('active',!isPT);
+    document.getElementById('lang-pt').classList.toggle('active',isPT);
+
+    // rebuild gallery
+    const g=document.getElementById('gallery');
+    g.innerHTML='';
+    GIFS.forEach(gif=>{
+      const src='/amostras/'+gif.file;
+      g.innerHTML+=`<div class="gallery-item"><img src="${src}" alt="${gif[lang]}" loading="lazy" onclick="openLB('${src}')"/><div class="caption"><h3>${gif[lang]}</h3><p>${gif.file}</p></div></div>`;
+    });
+  }
+
+  function openLB(src){document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('active')}
+
+  document.getElementById('lang-en').addEventListener('click',()=>render('en'));
+  document.getElementById('lang-pt').addEventListener('click',()=>render('pt'));
+  render('en');
+
+  // Starfield
+  const cvs=document.getElementById('space'),ctx=cvs.getContext('2d');let stars=[],w,h;
+  function resize(){w=cvs.width=innerWidth;h=cvs.height=innerHeight;stars=Array.from({length:120},()=>({x:Math.random()*w,y:Math.random()*h,z:Math.random()*2+.2,a:Math.random()*.6+.2}))}
+  addEventListener('resize',resize);resize();
+  (function loop(){ctx.clearRect(0,0,w,h);for(const s of stars){s.x+=s.z;if(s.x>w)s.x=0;ctx.globalAlpha=s.a;ctx.fillStyle='#9be8ff';ctx.fillRect(s.x,s.y,2,2)}requestAnimationFrame(loop)})();
+  </script>
+</body>
+</html>
